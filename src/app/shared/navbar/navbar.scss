@@ -1,0 +1,29 @@
+.logo {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+}
+
+.brand-logo {
+  height: 65px;
+  width: auto;
+}
+
+.brand-title {
+  font-size: 30px;
+  font-weight: bold;
+}

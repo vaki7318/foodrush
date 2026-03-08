@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "nom": "Chez Carlos",
+    "description": "Cuisine mexicaine authentique",
+    "adresse": "123 Rue Principale, Trois-Rivières",
+    "telephone": "819-111-1111",
+   "photo": "images/restaurant1.jpg",
+    "categorie": "Mexicain",
+    "proprietaireId": 3
+  },
+  {
+    "id": 2,
+    "nom": "La Table de Sophie",
+    "description": "Cuisine française raffinée",
+    "adresse": "456 Boulevard des Forges, Trois-Rivières",
+    "telephone": "819-222-2222",
+    "photo": "images/restaurant2.jpg",
+    "categorie": "Français",
+    "proprietaireId": 4
+  },
+  {
+    "id": 3,
+    "nom": "Chez Carlos",
+    "description": "Cuisine mexicaine authentique",
+    "adresse": "456 Avenue des Pins, Trois-Rivières",
+    "telephone": "819-333-3333",
+    "photo": "images/restaurant1.jpg",
+    "categorie": "Mexicain",
+    "proprietaireId": 3
+  }
+]

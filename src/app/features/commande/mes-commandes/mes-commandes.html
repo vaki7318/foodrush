@@ -1,0 +1,48 @@
+<div class="commandes-container">
+
+  <h1>📦 Mes commandes</h1>
+
+  <!-- Aucune commande -->
+  <div class="aucune-commande" *ngIf="commandes.length === 0">
+    <p>📭</p>
+    <p>Vous n'avez pas encore de commandes.</p>
+    <a class="btn-primary" routerLink="/restaurants">Commander maintenant</a>
+  </div>
+
+  <!-- Liste des commandes -->
+  <div class="commandes-liste" *ngIf="commandes.length > 0">
+
+    <div class="commande-card" *ngFor="let commande of commandes">
+
+      <div class="commande-header">
+        <div>
+          <h3>Commande #{{ commande.id }}</h3>
+          <p class="date">📅 {{ commande.dateCommande }}</p>
+        </div>
+        <span class="statut" [style.color]="getStatutCouleur(commande.statut)">
+          {{ getStatutLibelle(commande.statut) }}
+        </span>
+      </div>
+
+      <div class="lignes">
+        <div class="ligne-commande" *ngFor="let ligne of commande.lignes">
+          <span class="nom-plat">{{ ligne.nomPlat }}</span>
+          <span class="quantite">x{{ ligne.quantite }}</span>
+          <span class="prix">{{ ligne.prixUnitaire * ligne.quantite | currency:'CAD':'symbol':'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="commande-footer">
+        <div class="adresse">
+          📍 {{ commande.adresseLivraison }}
+        </div>
+        <div class="total">
+          Total : <strong>{{ getTotal(commande) | currency:'CAD':'symbol':'1.2-2' }}</strong>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

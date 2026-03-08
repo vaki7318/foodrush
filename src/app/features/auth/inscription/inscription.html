@@ -1,0 +1,123 @@
+<div class="inscription-container">
+  <div class="inscription-card">
+
+    <h2>Inscription</h2>
+    <p class="subtitle">Créez votre compte FoodRush</p>
+
+    <div *ngIf="erreur" class="erreur">
+      <mat-icon>error</mat-icon>
+      {{ erreur }}
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Prénoms </mat-label>
+        <input
+          matInput
+          name="prenoms"
+          [(ngModel)]="prenoms"
+          #prenomsCtrl="ngModel"
+          required
+          minlength="2"
+          placeholder=""
+        />
+        <mat-icon matSuffix>person</mat-icon>
+
+        <mat-error *ngIf="(submitted || prenomsCtrl.touched) && prenomsCtrl.invalid">
+          Prénoms obligatoires (min 2 caractères)
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Nom </mat-label>
+        <input
+          matInput
+          name="nom"
+          [(ngModel)]="nom"
+          #nomCtrl="ngModel"
+          required
+          minlength="2"
+          placeholder=""
+        />
+        <mat-icon matSuffix>badge</mat-icon>
+
+        <mat-error *ngIf="(submitted || nomCtrl.touched) && nomCtrl.invalid">
+          Nom obligatoire (min 2 caractères)
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email </mat-label>
+      <input
+        matInput
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        #emailCtrl="ngModel"
+        required
+        email
+        placeholder="exemple@email.com"
+      />
+      <mat-icon matSuffix>email</mat-icon>
+
+      <mat-error *ngIf="(submitted || emailCtrl.touched) && emailCtrl.invalid">
+        Entrez un email valide (ex: nom@domaine.com)
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Mot de passe </mat-label>
+      <input
+        matInput
+        [type]="cacheMotDePasse ? 'password' : 'text'"
+        name="motDePasse"
+        [(ngModel)]="motDePasse"
+        #mdpCtrl="ngModel"
+        required
+        minlength="4"
+      />
+      <button mat-icon-button matSuffix type="button" (click)="cacheMotDePasse = !cacheMotDePasse">
+        <mat-icon>{{ cacheMotDePasse ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+
+      <mat-error *ngIf="(submitted || mdpCtrl.touched) && mdpCtrl.invalid">
+        Le mot de passe doit contenir au moins 4 caractères
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Téléphone </mat-label>
+      <input
+        matInput
+        name="telephone"
+        [(ngModel)]="telephone"
+        #telCtrl="ngModel"
+        required
+        placeholder="514-000-0000"
+        pattern="^(\+?1\s?)?(\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}$"
+      />
+      <mat-icon matSuffix>phone</mat-icon>
+
+      <mat-error *ngIf="(submitted || telCtrl.touched) && telCtrl.invalid">
+        Téléphone invalide (ex: 514-000-0000)
+      </mat-error>
+    </mat-form-field>
+
+    <div class="role-selection">
+      <label>Je suis :</label>
+      <mat-radio-group [(ngModel)]="role" class="radio-group">
+        <mat-radio-button value="client">Client</mat-radio-button>
+        <mat-radio-button value="restaurateur">Restaurateur</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <button class="btn-primary" (click)="inscrire()">Créer mon compte</button>
+
+    <p class="login-lien">
+      Déjà un compte ?
+      <a routerLink="/auth/login">Se connecter</a>
+    </p>
+
+  </div>
+</div>

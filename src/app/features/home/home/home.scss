@@ -1,0 +1,149 @@
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #3f51b5, #7986cb);
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 40px;
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+  }
+
+  .btn-accent {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #e91e63;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #c2185b;
+    }
+  }
+}
+
+.categories {
+  margin-bottom: 30px;
+
+  h2 {
+    margin-bottom: 15px;
+  }
+
+  .chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #3f51b5;
+    background: white;
+    color: #3f51b5;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #e8eaf6;
+    }
+
+    &.active {
+      background-color: #3f51b5;
+      color: white;
+    }
+  }
+}
+
+.restaurants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 80px;
+}
+
+.restaurant-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .restaurant-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .restaurant-body {
+    padding: 16px;
+    flex: 1;
+
+    h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .adresse {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: grey;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .description {
+      color: #555;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .categorie-badge {
+      background: #e8eaf6;
+      color: #3f51b5;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .restaurant-footer {
+    padding: 16px;
+
+    .btn-primary {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      background-color: #3f51b5;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #303f9f;
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<mat-toolbar style="background-color: #3f51b5; color: white; position: fixed; top: 0; z-index: 1000; width: 100%;">
+
+  <div class="logo">
+    <a routerLink="/home" class="brand">
+      <img src="/images/foodrush-logo.png" alt="" class="brand-logo">
+      <span class="brand-title">🍽️</span>
+    </a>
+  </div>
+
+  <span class="spacer"></span>
+
+  <a mat-button routerLink="/restaurants" style="color: white;">Restaurants</a>
+
+  <ng-container *ngIf="!utilisateur">
+    <a mat-button routerLink="/auth/login" style="color: white;">Connexion</a>
+    <a mat-button routerLink="/auth/inscription" style="color: white;">Inscription</a>
+  </ng-container>
+
+  <ng-container *ngIf="utilisateur">
+
+    <ng-container *ngIf="utilisateur.role === 'client'">
+      <a mat-button routerLink="/commande/panier" style="color: white;">
+        <mat-icon>shopping_cart</mat-icon>
+        Panier <span *ngIf="nbArticlesPanier > 0">({{ nbArticlesPanier }})</span>
+      </a>
+      <a mat-button routerLink="/commande/mes-commandes" style="color: white;">Mes commandes</a>
+    </ng-container>
+
+    <ng-container *ngIf="utilisateur.role === 'restaurateur'">
+      <a mat-button routerLink="/restaurateur/dashboard" style="color: white;">Dashboard</a>
+      <a mat-button routerLink="/restaurateur/restaurants" style="color: white;">Mes restaurants</a>
+      <a mat-button routerLink="/restaurateur/plats" style="color: white;">Mes plats</a>
+    </ng-container>
+
+    <button mat-button [matMenuTriggerFor]="menu" style="color: white;">
+      <mat-icon>account_circle</mat-icon>
+      {{ utilisateur.nom }}
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Déconnexion
+      </button>
+    </mat-menu>
+
+  </ng-container>
+
+</mat-toolbar>

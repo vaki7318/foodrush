@@ -1,0 +1,123 @@
+.inscription-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.inscription-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+
+  h2 {
+    font-size: 1.8rem;
+    color: #3f51b5;
+    margin-bottom: 5px;
+  }
+
+  .subtitle {
+    color: grey;
+    margin-bottom: 25px;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #303f9f;
+  }
+}
+
+.erreur {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: red;
+  margin-bottom: 15px;
+}
+
+.role-selection {
+  margin-bottom: 20px;
+
+  label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+    color: #333;
+  }
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+.login-lien {
+  text-align: center;
+
+  a {
+    color: #3f51b5;
+    text-decoration: none;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+}
+/* Ligne Nom/Prénoms */
+.form-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start; /* important pour que les erreurs ne “écrasent” pas */
+  flex-wrap: wrap;         /* sur petit écran ça passe en colonne */
+}
+
+/* Les champs en demi largeur */
+.half-width {
+  flex: 1 1 220px;   /* 2 colonnes si possible, sinon ça wrap */
+  min-width: 220px;
+  width: 100%;
+}
+
+/* Plus d’espace entre les champs (utile quand mat-error apparaît) */
+.full-width {
+  width: 100%;
+  margin-bottom: 16px; /* au lieu de 10px */
+}
+
+/* Applique la même marge aux half-width aussi */
+.half-width {
+  margin-bottom: 16px;
+}
+
+/* Optionnel : agrandir un peu la carte pour que 2 champs côte à côte respirent */
+.inscription-card {
+  max-width: 560px; /* au lieu de 420px */
+}
+
+/* Optionnel : s’assurer que la zone d’erreur sous les champs a un peu d’air */
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  margin-top: 4px;
+}

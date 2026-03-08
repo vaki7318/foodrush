@@ -1,0 +1,64 @@
+<div class="panier-container">
+
+  <h1>🛒 Mon panier</h1>
+
+  <!-- Panier vide -->
+  <div class="panier-vide" *ngIf="panier.length === 0">
+    <p>🛒</p>
+    <p>Votre panier est vide.</p>
+    <a class="btn-primary" routerLink="/restaurants">Voir les restaurants</a>
+  </div>
+
+  <!-- Contenu panier -->
+  <div class="panier-contenu" *ngIf="panier.length > 0">
+
+    <div class="panier-card">
+      <div class="panier-item" *ngFor="let item of panier; let i = index">
+        <img [src]="item.plat.photo" [alt]="item.plat.nom" class="plat-image">
+        <div class="plat-info">
+          <h3>{{ item.plat.nom }}</h3>
+          <p class="prix-unitaire">{{ item.plat.prix | currency:'CAD':'symbol':'1.2-2' }} / unité</p>
+        </div>
+        <div class="quantite-controls">
+          <button type="button" class="btn-quantite" (click)="diminuerQuantite(i)">−</button>
+          <span class="quantite">{{ item.quantite }}</span>
+          <button type="button" class="btn-quantite" (click)="augmenterQuantite(i)">+</button>
+        </div>
+        <p class="sous-total">{{ item.plat.prix * item.quantite | currency:'CAD':'symbol':'1.2-2' }}</p>
+        <button type="button" class="btn-supprimer" (click)="supprimerPlat(i)">🗑️</button>
+      </div>
+
+      <div class="total">
+        <h2>Total : {{ getTotal() | currency:'CAD':'symbol':'1.2-2' }}</h2>
+      </div>
+    </div>
+
+    <!-- Adresse livraison -->
+    <div class="livraison-card">
+      <h3>Adresse de livraison</h3>
+      <input
+        type="text"
+        name="adresseLivraison"
+        [(ngModel)]="adresseLivraison"
+        placeholder="123 Rue Exemple, Ville"
+        class="input"
+        required
+      >
+
+      <p class="field-error" *ngIf="submittedCommande && adresseErreur">
+        {{ adresseErreur }}
+      </p>
+
+      <div class="livraison-actions">
+        <button type="button" class="btn-secondary" (click)="viderPanier()">
+          🗑️ Vider le panier
+        </button>
+        <button type="button" class="btn-primary" (click)="passerCommande()">
+          ✅ Passer la commande
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

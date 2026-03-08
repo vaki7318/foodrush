@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "clientId": 1,
+    "restaurantId": 1,
+    "lignes": [
+      {
+        "platId": 1,
+        "nomPlat": "Tacos au boeuf",
+        "quantite": 2,
+        "prixUnitaire": 12.99
+      },
+      {
+        "platId": 3,
+        "nomPlat": "Nachos",
+        "quantite": 1,
+        "prixUnitaire": 8.99
+      }
+    ],
+    "statut": "livree",
+    "dateCommande": "2025-01-15",
+    "adresseLivraison": "789 Rue des Érables, Trois-Rivières"
+  },
+  {
+    "id": 2,
+    "clientId": 2,
+    "restaurantId": 2,
+    "lignes": [
+      {
+        "platId": 5,
+        "nomPlat": "Boeuf bourguignon",
+        "quantite": 1,
+        "prixUnitaire": 18.99
+      }
+    ],
+    "statut": "en_attente",
+    "dateCommande": "2025-01-20",
+    "adresseLivraison": "321 Avenue du Parc, Trois-Rivières"
+  }
+]

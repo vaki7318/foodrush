@@ -1,0 +1,62 @@
+<div class="detail-container" *ngIf="restaurant">
+
+  <!-- En-tête restaurant -->
+  <div class="restaurant-header">
+    <img [src]="restaurant.photo" [alt]="restaurant.nom" class="restaurant-image">
+    <div class="restaurant-info">
+      <h1>{{ restaurant.nom }}</h1>
+      <p>{{ restaurant.description }}</p>
+      <p><mat-icon>place</mat-icon> {{ restaurant.adresse }}</p>
+      <p><mat-icon>phone</mat-icon> {{ restaurant.telephone }}</p>
+      <span class="categorie-badge">{{ restaurant.categorie }}</span>
+    </div>
+  </div>
+
+  <!-- Filtres plats -->
+  <div class="categories">
+    <h2>Notre menu</h2>
+    <div class="chips">
+      <button
+        *ngFor="let categorie of categories"
+        (click)="filtrerParCategorie(categorie)"
+        [class.active]="categorieSelectionnee === categorie"
+        class="chip">
+        {{ categorie }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Liste des plats -->
+  <div class="plats-grid">
+    <div class="plat-card" *ngFor="let plat of platsFiltres">
+      <img [src]="plat.photo" [alt]="plat.nom" class="plat-img">
+      <div class="plat-body">
+        <h3>{{ plat.nom }}</h3>
+        <span class="categorie-badge">{{ plat.categorie }}</span>
+        <p>{{ plat.description }}</p>
+        <p class="prix">{{ plat.prix | currency:'CAD':'symbol':'1.2-2' }}</p>
+      </div>
+      <div class="plat-footer">
+        <button class="btn-primary"
+                [disabled]="!plat.disponible"
+                (click)="ajouterAuPanier(plat)">
+          <mat-icon>add_shopping_cart</mat-icon>
+          {{ getQuantitePanier(plat.id) > 0 ? 'Ajouté (' + getQuantitePanier(plat.id) + ')' : 'Ajouter au panier' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aucun plat -->
+  <div class="aucun-plat" *ngIf="platsFiltres.length === 0">
+    <mat-icon>no_meals</mat-icon>
+    <p>Aucun plat disponible dans cette catégorie.</p>
+  </div>
+
+</div>
+
+<!-- Restaurant non trouvé -->
+<div class="non-trouve" *ngIf="!restaurant">
+  <mat-icon>error_outline</mat-icon>
+  <p>Restaurant introuvable.</p>
+</div>

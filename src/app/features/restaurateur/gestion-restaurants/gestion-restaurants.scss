@@ -1,0 +1,201 @@
+.gestion-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.formulaire-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  padding: 30px;
+  margin-bottom: 30px;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #3f51b5;
+  }
+}
+
+.form-group {
+  margin-bottom: 16px;
+
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+
+  .form-group {
+    flex: 1;
+  }
+}
+
+.input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: Roboto, sans-serif;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #3f51b5;
+  }
+}
+
+textarea.input {
+  resize: vertical;
+}
+
+select.input {
+  background: white;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover { background-color: #303f9f; }
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  background-color: white;
+  color: #3f51b5;
+  border: 1px solid #3f51b5;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover { background-color: #e8eaf6; }
+}
+
+.restaurants-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 80px;
+}
+
+.restaurant-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  .restaurant-image {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .restaurant-info {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 5px 0;
+      font-size: 1.1rem;
+    }
+
+    p {
+      margin: 0 0 5px 0;
+      color: grey;
+      font-size: 0.9rem;
+    }
+
+    .categorie {
+      background: #e8eaf6;
+      color: #3f51b5;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .restaurant-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.btn-icon-edit, .btn-icon-delete {
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  background: #f5f5f5;
+
+  &:hover { background: #e0e0e0; }
+}
+
+.aucun-restaurant {
+  text-align: center;
+  padding: 60px;
+  color: grey;
+  font-size: 1.2rem;
+}
+.file-input {
+  margin-top: 10px;
+}
+
+.photo-preview {
+  margin-top: 10px;
+  width: 100%;
+  max-width: 320px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+.field-error {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: #d32f2f;
+}
+.form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1 1 180px;
+}

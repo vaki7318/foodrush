@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "nom": "Tacos au boeuf",
+    "description": "Tacos garnis de boeuf épicé, salsa et guacamole",
+    "prix": 12.99,
+    "photo": "images/plat1.jpg",
+    "categorie": "Plat principal",
+    "restaurantId": 1,
+    "disponible": true
+  },
+  {
+    "id": 2,
+    "nom": "Quesadilla au poulet",
+    "description": "Quesadilla croustillante au poulet grillé et fromage",
+    "prix": 10.99,
+    "photo": "images/plat2.jpg",
+    "categorie": "Plat principal",
+    "restaurantId": 1,
+    "disponible": true
+  },
+  {
+    "id": 3,
+    "nom": "Nachos",
+    "description": "Nachos avec fromage fondu et jalapeños",
+    "prix": 8.99,
+    "photo": "images/plat3.jpg",
+    "categorie": "Entrée",
+    "restaurantId": 1,
+    "disponible": true
+  },
+  {
+    "id": 4,
+    "nom": "Soupe à l'oignon",
+    "description": "Soupe à l'oignon gratinée traditionnelle",
+    "prix": 9.99,
+    "photo": "images/plat4.jpg",
+    "categorie": "Entrée",
+    "restaurantId": 2,
+    "disponible": true
+  },
+  {
+    "id": 5,
+    "nom": "Boeuf bourguignon",
+    "description": "Boeuf mijoté au vin rouge avec légumes",
+    "prix": 18.99,
+    "photo": "images/plat5.jpg",
+    "categorie": "Plat principal",
+    "restaurantId": 2,
+    "disponible": true
+  },
+  {
+    "id": 6,
+    "nom": "Crème brûlée",
+    "description": "Crème brûlée à la vanille",
+    "prix": 6.99,
+    "photo": "images/plat6.jpg",
+    "categorie": "Dessert",
+    "restaurantId": 2,
+    "disponible": true
+  }
+]

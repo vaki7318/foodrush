@@ -1,0 +1,116 @@
+<div class="dashboard-container">
+
+  <h1>👨‍🍳 Dashboard Restaurateur</h1>
+  <!-- Sélecteur de restaurant si plusieurs -->
+  <div class="selecteur-restaurant" *ngIf="restaurants.length > 1">
+    <label>Sélectionner un restaurant :</label>
+    <div class="restaurant-tabs">
+      <button
+        type="button"
+        *ngFor="let r of restaurants"
+        [class.active]="restaurantSelectionne?.id === r.id"
+        (click)="selectionnerRestaurant(r)"
+        class="tab-btn">
+        {{ r.nom }} — {{ r.adresse }}
+      </button>
+    </div>
+  </div>
+
+  <div class="pas-restaurant" *ngIf="!restaurant">
+    <p>🏪</p>
+    <p>Vous n'avez pas encore de restaurant enregistré.</p>
+  </div>
+
+  <div *ngIf="restaurant">
+
+    <!-- Info restaurant -->
+    <div class="restaurant-card">
+      <img [src]="restaurant.photo" [alt]="restaurant.nom" class="restaurant-img">
+      <div class="restaurant-info">
+        <h2>{{ restaurant.nom }}</h2>
+        <p><mat-icon>place</mat-icon> {{ restaurant.adresse }}</p>
+        <p>{{ restaurant.description }}</p>
+      </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-icon">🍴</span>
+        <h2>{{ plats.length }}</h2>
+        <p>Plats au total</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">✅</span>
+        <h2>{{ getNombrePlatsDisponibles() }}</h2>
+        <p>Plats disponibles</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">⏳</span>
+        <h2>{{ getCommandesEnAttente() }}</h2>
+        <p>Commandes en attente</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">📋</span>
+        <h2>{{ commandes.length }}</h2>
+        <p>Commandes au total</p>
+      </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="actions">
+      <h2>Actions rapides</h2>
+      <a class="btn-primary" routerLink="/restaurateur/plats">
+        🍴 Gérer mes plats
+      </a>
+    </div>
+
+    <!-- Dernières commandes -->
+    <div class="commandes-section">
+      <h2>Dernières commandes</h2>
+
+      <div class="aucune-commande" *ngIf="commandes.length === 0">
+        <p>📭 Aucune commande pour le moment.</p>
+      </div>
+
+      <div class="commande-card" *ngFor="let commande of commandes">
+        <div class="commande-header">
+          <div>
+            <h3>Commande #{{ commande.id }}</h3>
+            <p class="date">📅 {{ commande.dateCommande }}</p>
+          </div>
+          <span class="statut" [style.color]="getStatutCouleur(commande.statut)">
+            {{ getStatutLibelle(commande.statut) }}
+          </span>
+        </div>
+
+        <div class="lignes">
+          <div class="ligne-commande" *ngFor="let ligne of commande.lignes">
+            <span class="nom-plat">{{ ligne.nomPlat }}</span>
+            <span class="quantite">x{{ ligne.quantite }}</span>
+            <span class="prix">{{ ligne.prixUnitaire * ligne.quantite | currency:'CAD':'symbol':'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="commande-footer">
+          <div class="adresse">📍 {{ commande.adresseLivraison }}</div>
+          <div class="footer-right">
+            <div class="total">
+              Total : <strong>{{ getTotal(commande) | currency:'CAD':'symbol':'1.2-2' }}</strong>
+            </div>
+            <button
+              type="button"
+              class="btn-statut"
+              *ngIf="commande.statut !== 'livree'"
+              (click)="changerStatut(commande)">
+              {{ getBoutonStatut(commande.statut) }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

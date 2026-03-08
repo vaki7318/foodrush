@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+/* Bouton primaire global */
+.btn-primary {
+  background-color: #3f51b5 !important;
+  color: white !important;
+  width: 100%;
+}
+
+.btn-accent {
+  background-color: #e91e63 !important;
+  color: white !important;
+}
+
+/* Fix card shadow */
+.mat-mdc-card {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+}

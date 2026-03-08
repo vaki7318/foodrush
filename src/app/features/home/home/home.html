@@ -1,0 +1,46 @@
+<div class="home-container">
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1>🍽️ Bienvenue sur FoodRush</h1>
+    <p>Commandez vos plats préférés en quelques clics</p>
+    <a class="btn-accent" routerLink="/restaurants">
+      Voir tous les restaurants
+    </a>
+  </div>
+
+  <!-- Filtres par catégorie -->
+  <div class="categories">
+    <h2>Parcourir par catégorie</h2>
+    <div class="chips">
+      <button
+        *ngFor="let categorie of categories"
+        (click)="filtrerParCategorie(categorie)"
+        [class.active]="categorieSelectionnee === categorie"
+        class="chip">
+        {{ categorie }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Liste des restaurants -->
+  <div class="restaurants-grid">
+    <div class="restaurant-card" *ngFor="let restaurant of restaurantsFiltres">
+      <img [src]="restaurant.photo" [alt]="restaurant.nom" class="restaurant-img">
+      <div class="restaurant-body">
+        <h3>{{ restaurant.nom }}</h3>
+        <p class="adresse">
+          <mat-icon>place</mat-icon> {{ restaurant.adresse }}
+        </p>
+        <p class="description">{{ restaurant.description }}</p>
+        <span class="categorie-badge">{{ restaurant.categorie }}</span>
+      </div>
+      <div class="restaurant-footer">
+        <a class="btn-primary" [routerLink]="['/restaurants', restaurant.id]">
+          Voir le menu
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>

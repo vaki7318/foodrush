@@ -1,0 +1,129 @@
+<div class="gestion-container">
+
+  <div class="entete">
+    <h1>🍴 Gestion des plats</h1>
+    <button type="button" class="btn-primary" (click)="ouvrirFormulaire()" *ngIf="!afficherFormulaire">
+      + Ajouter un plat
+    </button>
+  </div>
+
+  <div class="form-group" *ngIf="restaurants.length > 0 && !afficherFormulaire">
+    <label>Voir les plats du restaurant</label>
+    <select [(ngModel)]="restaurantSelectionneId" class="input" (change)="onRestaurantChange()">
+      <option *ngFor="let r of restaurants" [ngValue]="r.id">
+        {{ r.nom }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Formulaire ajout/édition -->
+  <div class="formulaire-card" *ngIf="afficherFormulaire">
+    <h2>{{ modeEdition ? 'Modifier le plat' : 'Ajouter un plat' }}</h2>
+    <div class="form-group" *ngIf="restaurants.length > 0">
+      <label>Restaurant *</label>
+      <select [(ngModel)]="platForm.restaurantId" class="input">
+        <option *ngFor="let r of restaurants" [ngValue]="r.id">
+          {{ r.nom }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Nom du plat *</label>
+      <input type="text" [(ngModel)]="platForm.nom" placeholder="Ex: Tacos au boeuf" class="input">
+    </div>
+
+    <div class="form-group">
+      <label>Description *</label>
+      <textarea [(ngModel)]="platForm.description" rows="3"
+                placeholder="Décrivez votre plat..." class="input"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Prix (CAD) *</label>
+        <input type="number" [(ngModel)]="platForm.prix" placeholder="0.00" class="input">
+      </div>
+      <div class="form-group">
+        <label>Catégorie *</label>
+        <select [(ngModel)]="platForm.categorie" class="input">
+          <option value="">-- Choisir --</option>
+          <option *ngFor="let cat of categoriesDisponibles" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Photo du plat</label>
+
+      <div class="photo-row">
+
+        <!-- Choisir depuis appareil -->
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onPhotoSelected($event)"
+          class="input"
+        >
+
+        <!-- URL image -->
+        <input
+          type="text"
+          [(ngModel)]="platForm.photo"
+          placeholder="Ou collez une URL d'image"
+          class="input"
+        >
+
+      </div>
+
+      <!-- Aperçu -->
+      <div *ngIf="platForm.photo" style="margin-top: 10px;">
+        <img [src]="platForm.photo" alt="Aperçu" style="max-width: 220px; border-radius: 8px;">
+      </div>
+
+    </div>
+
+    <div class="form-group toggle">
+      <label>
+        <input type="checkbox" [(ngModel)]="platForm.disponible">
+        Plat disponible
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="annuler()">Annuler</button>
+      <button type="button" class="btn-primary" (click)="sauvegarderPlat()">
+        {{ modeEdition ? '✏️ Modifier' : '✅ Ajouter' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Liste des plats -->
+  <div class="plats-liste" *ngIf="!afficherFormulaire">
+
+    <div class="aucun-plat" *ngIf="plats.length === 0">
+      <p>Vous n'avez pas encore de plats.</p>
+    </div>
+
+    <div class="plat-card" *ngFor="let plat of plats">
+      <img [src]="plat.photo || 'https://placehold.co/100x100?text=Plat'"
+           [alt]="plat.nom" class="plat-image">
+      <div class="plat-info">
+        <h3>{{ plat.nom }}</h3>
+        <p>{{ plat.description }}</p>
+        <p class="prix">{{ plat.prix | currency:'CAD':'symbol':'1.2-2' }}</p>
+        <span class="categorie">{{ plat.categorie }}</span>
+        <span class="disponibilite" [class.disponible]="plat.disponible"
+              [class.indisponible]="!plat.disponible">
+          {{ plat.disponible ? '✅ Disponible' : '❌ Indisponible' }}
+        </span>
+      </div>
+      <div class="plat-actions">
+        <button type="button" class="btn-icon-edit" (click)="editerPlat(plat)">✏️</button>
+        <button type="button" class="btn-icon-delete" (click)="supprimerPlat(plat.id)">🗑️</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

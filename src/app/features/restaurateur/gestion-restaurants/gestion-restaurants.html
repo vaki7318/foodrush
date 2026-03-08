@@ -1,0 +1,137 @@
+<div class="gestion-container">
+
+  <div class="entete">
+    <h1>🏪 Mes restaurants</h1>
+    <button type="button" class="btn-primary" (click)="ouvrirFormulaire()" *ngIf="!afficherFormulaire">
+      + Ajouter un restaurant
+    </button>
+  </div>
+
+  <!-- Formulaire ajout/édition -->
+  <div class="formulaire-card" *ngIf="afficherFormulaire">
+    <h2>{{ modeEdition ? 'Modifier le restaurant' : 'Ajouter un restaurant' }}</h2>
+
+    <div class="form-group">
+      <label>Nom du restaurant *</label>
+      <input type="text" [(ngModel)]="restaurantForm.nom" placeholder="Ex: Chez Carlos" class="input">
+    </div>
+
+    <div class="form-group">
+      <label>Description *</label>
+      <textarea [(ngModel)]="restaurantForm.description" rows="3"
+                placeholder="Décrivez votre restaurant..." class="input"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Adresse *</label>
+          <input
+            type="text"
+            [(ngModel)]="adresseLigne"
+            class="input"
+          >
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Ville *</label>
+            <input type="text" [(ngModel)]="ville"  class="input">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Téléphone *</label>
+        <input
+          type="tel"
+          name="telephone"
+          [(ngModel)]="restaurantForm.telephone"
+          placeholder="819-000-0000"
+          class="input"
+          required
+        >
+
+        <!-- Message d'erreur sous le champ -->
+        <p class="field-error" *ngIf="submittedRestaurant && telephoneErreur">
+          {{ telephoneErreur }}
+        </p>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Catégorie *</label>
+        <select [(ngModel)]="restaurantForm.categorie" class="input">
+          <option value="">-- Choisir --</option>
+          <option *ngFor="let cat of categoriesDisponibles" [value]="cat">{{ cat }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Photo (URL ou fichier)</label>
+
+        <!-- URL (optionnel) -->
+        <input
+          type="text"
+          [(ngModel)]="restaurantForm.photo"
+          placeholder="https://... ou laisser vide"
+          class="input"
+        >
+
+        <!-- Upload fichier (recommandé) -->
+        <input
+          type="file"
+          accept="image/*"
+          class="input file-input"
+          (change)="onPhotoSelected($event)"
+        >
+
+        <!-- Aperçu -->
+        <img
+          *ngIf="restaurantForm.photo"
+          [src]="restaurantForm.photo"
+          alt="Aperçu photo"
+          class="photo-preview"
+        >
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="annuler()">Annuler</button>
+      <button type="button" class="btn-primary" (click)="sauvegarderRestaurant()">
+        {{ modeEdition ? '✏️ Modifier' : '✅ Ajouter' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Liste des restaurants -->
+  <div class="restaurants-liste" *ngIf="!afficherFormulaire">
+
+    <div class="aucun-restaurant" *ngIf="restaurants().length === 0">
+      <p>🏪</p>
+      <p>Vous n'avez pas encore de restaurants.</p>
+    </div>
+
+    <div class="restaurant-card" *ngFor="let restaurant of restaurants()">
+      <img [src]="restaurant.photo || 'https://placehold.co/150x100?text=Restaurant'"
+           [alt]="restaurant.nom" class="restaurant-image">
+      <div class="restaurant-info">
+        <h3>{{ restaurant.nom }}</h3>
+        <p>{{ restaurant.description }}</p>
+        <p class="adresse">📍 {{ restaurant.adresse }}</p>
+        <p class="telephone">📞 {{ restaurant.telephone }}</p>
+        <span class="categorie">{{ restaurant.categorie }}</span>
+      </div>
+      <div class="restaurant-actions">
+        <a [routerLink]="['/restaurateur/restaurants', restaurant.id]"
+           class="btn-details">
+          📄 Détails
+        </a>
+        <button type="button" class="btn-icon-edit" (click)="editerRestaurant(restaurant)">✏️</button>
+        <button type="button" class="btn-icon-delete" (click)="supprimerRestaurant(restaurant.id)">🗑️</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

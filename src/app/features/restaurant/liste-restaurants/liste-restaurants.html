@@ -1,0 +1,50 @@
+<div class="liste-container">
+
+  <h1>🍽️ Tous les restaurants</h1>
+
+  <!-- Barre de recherche -->
+  <mat-form-field appearance="outline" class="recherche">
+    <mat-label>Rechercher un restaurant</mat-label>
+    <input matInput [(ngModel)]="recherche" (ngModelChange)="rechercherRestaurant()" placeholder="Nom ou description...">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <!-- Filtres par catégorie -->
+  <div class="categories">
+    <mat-chip-set>
+      <mat-chip *ngFor="let categorie of categories"
+                (click)="filtrerParCategorie(categorie)"
+                [class.active]="categorieSelectionnee === categorie">
+        {{ categorie }}
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <!-- Résultats -->
+  <p class="resultats">{{ restaurantsFiltres.length }} restaurant(s) trouvé(s)</p>
+
+  <!-- Liste -->
+  <div class="restaurants-grid">
+    <div class="restaurant-card" *ngFor="let restaurant of restaurantsFiltres">
+      <img [src]="restaurant.photo" [alt]="restaurant.nom" class="restaurant-img">
+      <div class="restaurant-body">
+        <h3>{{ restaurant.nom }}</h3>
+        <p class="adresse"><mat-icon>place</mat-icon> {{ restaurant.adresse }}</p>
+        <p class="description">{{ restaurant.description }}</p>
+        <span class="categorie-badge">{{ restaurant.categorie }}</span>
+      </div>
+      <div class="restaurant-footer">
+        <a class="btn-primary" [routerLink]="['/restaurants', restaurant.id]">
+          Voir le menu
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aucun résultat -->
+  <div class="aucun-resultat" *ngIf="restaurantsFiltres.length === 0">
+    <mat-icon>search_off</mat-icon>
+    <p>Aucun restaurant trouvé.</p>
+  </div>
+
+</div>
