@@ -37,6 +37,10 @@
       {{ utilisateur.nom }}
     </button>
     <mat-menu #menu="matMenu">
+      <a mat-menu-item routerLink="/profil">
+        <mat-icon>person</mat-icon>
+        Mon profil
+      </a>
       <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon>
         Déconnexion

@@ -1,0 +1,158 @@
+.profil-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80vh;
+  padding-top: 40px;
+}
+
+.profil-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.profil-header {
+  text-align: center;
+  margin-bottom: 30px;
+
+  .avatar-icon {
+    font-size: 80px;
+    width: 80px;
+    height: 80px;
+    color: #3f51b5;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: #3f51b5;
+    margin: 10px 0 5px;
+  }
+
+  .role-badge {
+    display: inline-block;
+    background-color: #e8eaf6;
+    color: #3f51b5;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+}
+
+.info-section {
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+
+    mat-icon {
+      color: #3f51b5;
+    }
+
+    .label {
+      display: block;
+      font-size: 0.8rem;
+      color: #999;
+      text-transform: uppercase;
+    }
+
+    .value {
+      display: block;
+      font-size: 1rem;
+      color: #333;
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #303f9f;
+  }
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 14px;
+  background-color: white;
+  color: #3f51b5;
+  border: 2px solid #3f51b5;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #e8eaf6;
+  }
+}
+
+.btn-outline {
+  width: 100%;
+  padding: 14px;
+  background-color: transparent;
+  color: #666;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #999;
+  }
+}
+
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.erreur {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: red;
+  margin-bottom: 15px;
+}
+
+.mdp-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}

@@ -20,6 +20,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/inscription/inscription').then(m => m.InscriptionComponent)
   },
   {
+    path: 'auth/recuperation',
+    loadComponent: () => import('./features/auth/recuperation/recuperation').then(m => m.RecuperationComponent)
+  },
+  {
+    path: 'profil',
+    loadComponent: () => import('./features/profil/profil').then(m => m.ProfilComponent),
+    canActivate: [AuthGuard],
+    data: { roles: ['client', 'restaurateur'] }
+  },
+  {
     path: 'restaurants',
     loadComponent: () => import('./features/restaurant/liste-restaurants/liste-restaurants').then(m => m.ListeRestaurantsComponent)
   },

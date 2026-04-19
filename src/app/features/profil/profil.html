@@ -1,0 +1,98 @@
+<div class="profil-container">
+  <div class="profil-card">
+
+    <div class="profil-header">
+      <mat-icon class="avatar-icon">account_circle</mat-icon>
+      <h2>Mon Profil</h2>
+      <p class="role-badge">{{ utilisateur?.role | titlecase }}</p>
+    </div>
+
+    <div *ngIf="erreur" class="erreur">
+      <mat-icon>error</mat-icon>
+      {{ erreur }}
+    </div>
+
+    <!-- Mode affichage -->
+    <div *ngIf="!modeEdition" class="info-section">
+      <div class="info-row">
+        <mat-icon>person</mat-icon>
+        <div>
+          <span class="label">Nom</span>
+          <span class="value">{{ utilisateur?.nom }}</span>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <mat-icon>email</mat-icon>
+        <div>
+          <span class="label">Email</span>
+          <span class="value">{{ utilisateur?.email }}</span>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <mat-icon>phone</mat-icon>
+        <div>
+          <span class="label">Téléphone</span>
+          <span class="value">{{ utilisateur?.telephone || 'Non renseigné' }}</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" (click)="activerEdition()">
+        <mat-icon>edit</mat-icon>
+        Modifier mes informations
+      </button>
+
+      <button class="btn-secondary" (click)="toggleChangementMdp()">
+        <mat-icon>lock</mat-icon>
+        {{ modeChangementMdp ? 'Annuler' : 'Changer le mot de passe' }}
+      </button>
+    </div>
+
+    <!-- Mode édition -->
+    <div *ngIf="modeEdition" class="edit-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom complet</mat-label>
+        <input matInput [(ngModel)]="nom">
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email">
+        <mat-icon matSuffix>email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Téléphone</mat-label>
+        <input matInput [(ngModel)]="telephone" placeholder="514-000-0000">
+        <mat-icon matSuffix>phone</mat-icon>
+      </mat-form-field>
+
+      <div class="btn-group">
+        <button class="btn-primary" (click)="sauvegarderProfil()">Sauvegarder</button>
+        <button class="btn-outline" (click)="annulerEdition()">Annuler</button>
+      </div>
+    </div>
+
+    <!-- Changement de mot de passe -->
+    <div *ngIf="modeChangementMdp && !modeEdition" class="mdp-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mot de passe actuel</mat-label>
+        <input matInput [type]="cacheMotDePasse ? 'password' : 'text'" [(ngModel)]="motDePasseActuel">
+        <button type="button" mat-icon-button matSuffix (click)="cacheMotDePasse = !cacheMotDePasse">
+          <mat-icon>{{ cacheMotDePasse ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nouveau mot de passe</mat-label>
+        <input matInput [type]="cacheMotDePasse ? 'password' : 'text'" [(ngModel)]="nouveauMotDePasse">
+        <mat-icon matSuffix>lock</mat-icon>
+      </mat-form-field>
+
+      <button class="btn-primary" (click)="changerMotDePasse()">Confirmer le changement</button>
+    </div>
+
+  </div>
+</div>

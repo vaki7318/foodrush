@@ -17,9 +17,13 @@ export class AuthService {
     return this.http.get<Utilisateur[]>(this.url).pipe(
       map(utilisateurs => {
 
-        // Récupérer les utilisateurs inscrits en local
+        // Récupérer les utilisateurs inscrits/modifiés en local
         const inscritsLocal = this.getUtilisateursLocaux();
-        const tousLesUtilisateurs = [...utilisateurs, ...inscritsLocal];
+
+        // Les utilisateurs locaux écrasent ceux du JSON (par email)
+        const emailsLocaux = new Set(inscritsLocal.map(u => u.email));
+        const utilisateursDuJson = utilisateurs.filter(u => !emailsLocaux.has(u.email));
+        const tousLesUtilisateurs = [...utilisateursDuJson, ...inscritsLocal];
 
         const user = tousLesUtilisateurs.find(
           u => u.email === email && u.motDePasse === motDePasse
@@ -70,6 +74,45 @@ export class AuthService {
 
   estRestaurateur(): boolean {
     return this.getUtilisateurConnecte()?.role === 'restaurateur';
+  }
+
+  trouverParEmail(email: string): Observable<Utilisateur | null> {
+    return this.http.get<Utilisateur[]>(this.url).pipe(
+      map(utilisateurs => {
+        const inscritsLocal = this.getUtilisateursLocaux();
+        const tousLesUtilisateurs = [...utilisateurs, ...inscritsLocal];
+        return tousLesUtilisateurs.find(u => u.email === email) ?? null;
+      })
+    );
+  }
+
+  reinitialiserMotDePasse(email: string, nouveauMotDePasse: string, utilisateurOriginal?: Utilisateur): void {
+    const inscrits = this.getUtilisateursLocaux();
+    const index = inscrits.findIndex(u => u.email === email);
+    if (index !== -1) {
+      inscrits[index].motDePasse = nouveauMotDePasse;
+    } else if (utilisateurOriginal) {
+      // L'utilisateur vient du JSON mock, on crée une copie locale avec le nouveau mdp
+      inscrits.push({ ...utilisateurOriginal, motDePasse: nouveauMotDePasse });
+    } else {
+      inscrits.push({ id: Date.now(), nom: '', email, motDePasse: nouveauMotDePasse, role: 'client' });
+    }
+    localStorage.setItem('utilisateurs_inscrits', JSON.stringify(inscrits));
+  }
+
+  mettreAJourProfil(utilisateur: Utilisateur): void {
+    localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
+    this.utilisateurConnecte = utilisateur;
+
+    // Mettre à jour ou créer dans la liste des inscrits locaux
+    const inscrits = this.getUtilisateursLocaux();
+    const index = inscrits.findIndex(u => u.id === utilisateur.id || u.email === utilisateur.email);
+    if (index !== -1) {
+      inscrits[index] = utilisateur;
+    } else {
+      inscrits.push(utilisateur);
+    }
+    localStorage.setItem('utilisateurs_inscrits', JSON.stringify(inscrits));
   }
 
   private getUtilisateursLocaux(): Utilisateur[] {
