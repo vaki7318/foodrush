@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="create-commandes-table" author="foodrush">
+        <createTable tableName="commandes">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="restaurant_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="statut" type="varchar(20)" defaultValue="en_attente">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_commande" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="adresse_livraison" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

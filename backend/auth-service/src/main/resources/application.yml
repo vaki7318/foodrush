@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/foodrush_auth}
+    driver-class-name: org.postgresql.Driver
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:db/changelog-master.xml
+
+jwt:
+  secret: foodrush-secret-key-2026
+  expiration: 86400000
+
+cors:
+  allowed-origins: http://localhost:4200
