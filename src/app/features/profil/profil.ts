@@ -121,27 +121,30 @@ export class ProfilComponent implements OnInit {
 
     if (!this.utilisateur) return;
 
-    if (this.motDePasseActuel !== this.utilisateur.motDePasse) {
-      this.erreur = 'Le mot de passe actuel est incorrect.';
-      return;
-    }
-
+    // Avec le backend, on ne vérifie pas le mot de passe localement
+    // Le backend s'en charge
     if (this.nouveauMotDePasse.length < 4) {
       this.erreur = 'Le nouveau mot de passe doit contenir au moins 4 caractères.';
       return;
     }
 
-    this.utilisateur.motDePasse = this.nouveauMotDePasse;
-    this.authService.mettreAJourProfil(this.utilisateur);
-    this.modeChangementMdp = false;
-    this.motDePasseActuel = '';
-    this.nouveauMotDePasse = '';
-
-    this.snackBar.open('Mot de passe modifié avec succès !', undefined, {
-      duration: 3000,
-      verticalPosition: 'bottom',
-      horizontalPosition: 'center'
+    // Appel au backend pour changer le mot de passe
+    this.authService.reinitialiserMotDePasse(this.utilisateur.email, this.nouveauMotDePasse).subscribe({
+      next: () => {
+        this.modeChangementMdp = false;
+        this.motDePasseActuel = '';
+        this.nouveauMotDePasse = '';
+        this.snackBar.open('Mot de passe modifié avec succès !', undefined, {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.erreur = 'Erreur lors de la modification du mot de passe.';
+        this.cdr.detectChanges();
+      }
     });
-    this.cdr.detectChanges();
   }
 }

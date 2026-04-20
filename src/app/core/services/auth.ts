@@ -1,58 +1,89 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, map, tap } from 'rxjs';
 import { Utilisateur } from '../models/utilisateur';
+import { environment } from '../../../environments/environment';
+
+interface AuthResponse {
+  token: string;
+  nom: string;
+  email: string;
+  role: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private url = 'assets/mock/utilisateurs.json';
+  private apiUrl = environment.apiUrl;
   private utilisateurConnecte: Utilisateur | null = null;
 
   constructor(private http: HttpClient) {}
 
   login(email: string, motDePasse: string): Observable<Utilisateur | null> {
-    return this.http.get<Utilisateur[]>(this.url).pipe(
-      map(utilisateurs => {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, { email, password: motDePasse })
+      .pipe(
+        tap(response => {
+          if (response.token) {
+            localStorage.setItem('token', response.token);
+            const user: Utilisateur = {
+              uid: '',
+              nom: response.nom,
+              email: response.email,
+              role: response.role as 'client' | 'restaurateur'
+            };
+            this.utilisateurConnecte = user;
+            localStorage.setItem('utilisateur', JSON.stringify(user));
+          }
+        }),
+        map(response => {
+          if (response.token) {
+            return {
+              uid: '',
+              nom: response.nom,
+              email: response.email,
+              role: response.role as 'client' | 'restaurateur'
+            };
+          }
+          return null;
+        })
+      );
+  }
 
-        // Récupérer les utilisateurs inscrits/modifiés en local
-        const inscritsLocal = this.getUtilisateursLocaux();
-
-        // Les utilisateurs locaux écrasent ceux du JSON (par email)
-        const emailsLocaux = new Set(inscritsLocal.map(u => u.email));
-        const utilisateursDuJson = utilisateurs.filter(u => !emailsLocaux.has(u.email));
-        const tousLesUtilisateurs = [...utilisateursDuJson, ...inscritsLocal];
-
-        const user = tousLesUtilisateurs.find(
-          u => u.email === email && u.motDePasse === motDePasse
-        );
-
-        if (user) {
+  inscription(data: { nom: string; email: string; motDePasse: string; role: 'client' | 'restaurateur'; telephone?: string }): Observable<Utilisateur | null> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, {
+      nom: data.nom,
+      email: data.email,
+      password: data.motDePasse,
+      role: data.role,
+      telephone: data.telephone
+    }).pipe(
+      tap(response => {
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+          const user: Utilisateur = {
+            uid: '',
+            nom: response.nom,
+            email: response.email,
+            role: response.role as 'client' | 'restaurateur'
+          };
           this.utilisateurConnecte = user;
           localStorage.setItem('utilisateur', JSON.stringify(user));
         }
-
-        return user ?? null;
-      })
+      }),
+      map(response => response.token ? {
+        uid: '',
+        nom: response.nom,
+        email: response.email,
+        role: response.role as 'client' | 'restaurateur'
+      } : null)
     );
-  }
-
-  inscription(nouvelUtilisateur: Utilisateur): void {
-    this.utilisateurConnecte = nouvelUtilisateur;
-    localStorage.setItem('utilisateur', JSON.stringify(nouvelUtilisateur));
-
-    // Sauvegarder dans la liste des inscrits locaux
-    const inscrits = this.getUtilisateursLocaux();
-    inscrits.push(nouvelUtilisateur);
-    localStorage.setItem('utilisateurs_inscrits', JSON.stringify(inscrits));
-
-    console.log('Nouvel utilisateur enregistré :', nouvelUtilisateur);
   }
 
   logout(): void {
     this.utilisateurConnecte = null;
+    localStorage.removeItem('token');
     localStorage.removeItem('utilisateur');
   }
 
@@ -64,8 +95,12 @@ export class AuthService {
     return data ? JSON.parse(data) : null;
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
   estConnecte(): boolean {
-    return this.getUtilisateurConnecte() !== null;
+    return this.getToken() !== null;
   }
 
   estClient(): boolean {
@@ -77,46 +112,19 @@ export class AuthService {
   }
 
   trouverParEmail(email: string): Observable<Utilisateur | null> {
-    return this.http.get<Utilisateur[]>(this.url).pipe(
-      map(utilisateurs => {
-        const inscritsLocal = this.getUtilisateursLocaux();
-        const tousLesUtilisateurs = [...utilisateurs, ...inscritsLocal];
-        return tousLesUtilisateurs.find(u => u.email === email) ?? null;
-      })
-    );
+    return this.http.get<Utilisateur[]>(`${this.apiUrl}/users`)
+      .pipe(map(users => users.find(u => u.email === email) ?? null));
   }
 
-  reinitialiserMotDePasse(email: string, nouveauMotDePasse: string, utilisateurOriginal?: Utilisateur): void {
-    const inscrits = this.getUtilisateursLocaux();
-    const index = inscrits.findIndex(u => u.email === email);
-    if (index !== -1) {
-      inscrits[index].motDePasse = nouveauMotDePasse;
-    } else if (utilisateurOriginal) {
-      // L'utilisateur vient du JSON mock, on crée une copie locale avec le nouveau mdp
-      inscrits.push({ ...utilisateurOriginal, motDePasse: nouveauMotDePasse });
-    } else {
-      inscrits.push({ id: Date.now(), nom: '', email, motDePasse: nouveauMotDePasse, role: 'client' });
-    }
-    localStorage.setItem('utilisateurs_inscrits', JSON.stringify(inscrits));
+  reinitialiserMotDePasse(email: string, nouveauMotDePasse: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/recover`, {
+      email,
+      nouveauMotDePasse: nouveauMotDePasse
+    });
   }
 
   mettreAJourProfil(utilisateur: Utilisateur): void {
     localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
     this.utilisateurConnecte = utilisateur;
-
-    // Mettre à jour ou créer dans la liste des inscrits locaux
-    const inscrits = this.getUtilisateursLocaux();
-    const index = inscrits.findIndex(u => u.id === utilisateur.id || u.email === utilisateur.email);
-    if (index !== -1) {
-      inscrits[index] = utilisateur;
-    } else {
-      inscrits.push(utilisateur);
-    }
-    localStorage.setItem('utilisateurs_inscrits', JSON.stringify(inscrits));
-  }
-
-  private getUtilisateursLocaux(): Utilisateur[] {
-    const data = localStorage.getItem('utilisateurs_inscrits');
-    return data ? JSON.parse(data) : [];
   }
 }

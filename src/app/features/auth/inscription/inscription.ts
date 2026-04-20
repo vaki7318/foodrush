@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth';
 import { Utilisateur } from '../../../core/models/utilisateur';
 
@@ -40,7 +41,7 @@ export class InscriptionComponent {
   cacheMotDePasse = true;
   submitted = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
   private isValidPassword(pwd: string): boolean {
     return pwd.length >= 4;
@@ -81,20 +82,37 @@ export class InscriptionComponent {
     }
 
     const nouvelUtilisateur: Utilisateur = {
-      id: Date.now(),
-      nom: `${this.prenoms.trim()} ${this.nom.trim()}`, // on garde votre modèle "nom" unique
+      uid: '',
+      nom: `${this.prenoms.trim()} ${this.nom.trim()}`,
       email: this.email.trim(),
-      motDePasse: this.motDePasse,
       role: this.role,
       telephone: this.telephone.trim()
     };
 
-    this.authService.inscription(nouvelUtilisateur);
-
-    if (this.role === 'restaurateur') {
-      this.router.navigate(['/restaurateur/dashboard']);
-    } else {
-      this.router.navigate(['/home']);
-    }
+    this.authService.inscription({
+      nom: `${this.prenoms.trim()} ${this.nom.trim()}`,
+      email: this.email.trim(),
+      motDePasse: this.motDePasse,
+      role: this.role,
+      telephone: this.telephone.trim()
+    }).subscribe({
+      next: (utilisateur) => {
+        if (utilisateur) {
+          if (this.role === 'restaurateur') {
+            this.router.navigate(['/restaurateur/dashboard']);
+          } else {
+            this.router.navigate(['/home']);
+          }
+        }
+      },
+      error: (err) => {
+        this.erreur = 'Erreur lors de l\'inscription.';
+        this.snackBar.open(this.erreur, undefined, {
+          duration: 4000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+      }
+    });
   }
 }

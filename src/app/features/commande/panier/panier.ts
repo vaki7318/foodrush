@@ -118,7 +118,7 @@ export class PanierComponent implements OnInit {
 
     const commande: Commande = {
       id: Date.now(),
-      clientId: utilisateur!.id,
+      clientId: utilisateur!.uid,
       restaurantId: this.panier[0].plat.restaurantId,
       lignes,
       statut: 'en_attente',

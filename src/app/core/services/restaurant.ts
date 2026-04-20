@@ -1,46 +1,43 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Restaurant } from '../models/restaurant';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RestaurantService {
 
-  private url = 'assets/mock/restaurants.json';
+  private apiUrl = environment.businessUrl;
 
   constructor(private http: HttpClient) {}
 
   getRestaurants(): Observable<Restaurant[]> {
-    return this.http.get<Restaurant[]>(this.url).pipe(
-      map(restaurants => {
-        const restaurantsLocaux = this.getRestaurantsLocaux();
-        return [...restaurants, ...restaurantsLocaux];
-      })
-    );
+    return this.http.get<Restaurant[]>(`${this.apiUrl}/restaurants`);
   }
 
-  getRestaurantById(id: number): Observable<Restaurant | undefined> {
-    return this.getRestaurants().pipe(
-      map(restaurants => restaurants.find(r => r.id === id))
-    );
+  getRestaurantById(id: number): Observable<Restaurant> {
+    return this.http.get<Restaurant>(`${this.apiUrl}/restaurants/${id}`);
   }
 
   getRestaurantsByCategorie(categorie: string): Observable<Restaurant[]> {
-    return this.getRestaurants().pipe(
-      map(restaurants => restaurants.filter(r => r.categorie === categorie))
-    );
+    return this.http.get<Restaurant[]>(`${this.apiUrl}/restaurants/categorie/${categorie}`);
   }
 
-  getRestaurantsByProprietaire(proprietaireId: number): Observable<Restaurant[]> {
-    return this.getRestaurants().pipe(
-      map(restaurants => restaurants.filter(r => r.proprietaireId === proprietaireId))
-    );
+  getRestaurantsByProprietaire(proprietaireId: string): Observable<Restaurant[]> {
+    return this.http.get<Restaurant[]>(`${this.apiUrl}/restaurants/proprietaire/${proprietaireId}`);
   }
 
-  private getRestaurantsLocaux(): Restaurant[] {
-    const data = localStorage.getItem('restaurants_ajoutes');
-    return data ? JSON.parse(data) : [];
+  createRestaurant(restaurant: Restaurant): Observable<Restaurant> {
+    return this.http.post<Restaurant>(`${this.apiUrl}/restaurants`, restaurant);
+  }
+
+  updateRestaurant(id: number, restaurant: Restaurant): Observable<Restaurant> {
+    return this.http.put<Restaurant>(`${this.apiUrl}/restaurants/${id}`, restaurant);
+  }
+
+  deleteRestaurant(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/restaurants/${id}`);
   }
 }

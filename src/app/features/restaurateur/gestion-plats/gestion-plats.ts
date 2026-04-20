@@ -55,7 +55,7 @@ export class GestionPlatsComponent implements OnInit {
 
     this.restaurantService.getRestaurants().subscribe({
       next: (data) => {
-        this.restaurants = data.filter(r => r.proprietaireId === utilisateur!.id);
+        this.restaurants = data.filter(r => r.proprietaireId === utilisateur!.uid);
 
         // Si le restaurateur a au moins un restaurant, on sélectionne le premier par défaut
         if (this.restaurants.length > 0) {

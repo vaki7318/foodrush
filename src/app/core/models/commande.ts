@@ -6,8 +6,8 @@ export interface LigneCommande {
 }
 
 export interface Commande {
-  id: number;
-  clientId: number;
+  id?: number;
+  clientId: string;
   restaurantId: number;
   lignes: LigneCommande[];
   statut: 'en_attente' | 'en_preparation' | 'livree';

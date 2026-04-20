@@ -39,7 +39,7 @@ export class GestionRestaurantsComponent implements OnInit {
     telephone: '',
     photo: '',
     categorie: '',
-    proprietaireId: 0
+    proprietaireId: ''
   };
   adresseLigne = '';
   ville = '';
@@ -63,7 +63,7 @@ export class GestionRestaurantsComponent implements OnInit {
     // getRestaurants() contient déjà JSON + localStorage
     this.restaurantService.getRestaurants().subscribe({
       next: (data) => {
-        const mesRestaurants = data.filter(r => r.proprietaireId === utilisateur.id);
+        const mesRestaurants = data.filter(r => r.proprietaireId === utilisateur.uid);
         this.restaurants.set(mesRestaurants);
       },
       error: (err) => console.error('Erreur:', err)
@@ -88,7 +88,7 @@ export class GestionRestaurantsComponent implements OnInit {
       telephone: '',
       photo: '',
       categorie: '',
-      proprietaireId: utilisateur!.id
+      proprietaireId: utilisateur!.uid
     };
     this.afficherFormulaire = true;
     this.adresseLigne = '';

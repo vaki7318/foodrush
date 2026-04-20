@@ -2,46 +2,34 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Commande } from '../models/commande';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommandeService {
 
-  private url = 'assets/mock/commandes.json';
+  private apiUrl = environment.businessUrl;
 
   constructor(private http: HttpClient) {}
 
   getCommandes(): Observable<Commande[]> {
-    return this.http.get<Commande[]>(this.url);
+    return this.http.get<Commande[]>(`${this.apiUrl}/commandes`);
   }
 
-  getCommandesByClient(clientId: number): Observable<Commande[]> {
-    return this.http.get<Commande[]>(this.url);
+  getCommandesByClient(clientId: string): Observable<Commande[]> {
+    return this.http.get<Commande[]>(`${this.apiUrl}/commandes/client/${clientId}`);
   }
 
   getCommandesByRestaurant(restaurantId: number): Observable<Commande[]> {
-    return this.http.get<Commande[]>(this.url);
+    return this.http.get<Commande[]>(`${this.apiUrl}/commandes/restaurant/${restaurantId}`);
   }
 
-  ajouterCommande(commande: Commande): void {
-    const commandes = this.getCommandesEnMemoire();
-    commandes.push(commande);
-    localStorage.setItem('commandes', JSON.stringify(commandes));
-    console.log('Commande enregistrée :', commande);
-  }
-  mettreAJourCommande(commande: Commande): void {
-    const commandes = this.getCommandesEnMemoire();
-    const index = commandes.findIndex(c => c.id === commande.id);
-    if (index !== -1) {
-      commandes[index] = commande;
-      localStorage.setItem('commandes', JSON.stringify(commandes));
-    }
-    console.log('Commande mise à jour :', commande);
+  ajouterCommande(commande: Commande): Observable<Commande> {
+    return this.http.post<Commande>(`${this.apiUrl}/commandes`, commande);
   }
 
-  getCommandesEnMemoire(): Commande[] {
-    const data = localStorage.getItem('commandes');
-    return data ? JSON.parse(data) : [];
+  mettreAJourStatut(commandeId: number, statut: string): Observable<Commande> {
+    return this.http.put<Commande>(`${this.apiUrl}/commandes/${commandeId}/statut`, { statut });
   }
 }

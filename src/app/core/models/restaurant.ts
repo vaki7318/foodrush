@@ -6,5 +6,5 @@ export interface Restaurant {
   telephone: string;
   photo: string;
   categorie: string;
-  proprietaireId: number;
+  proprietaireId: string;
 }

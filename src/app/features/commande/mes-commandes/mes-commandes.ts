@@ -31,22 +31,16 @@ export class MesCommandesComponent implements OnInit {
     const utilisateur = this.authService.getUtilisateurConnecte();
     console.log('Utilisateur connecté:', utilisateur);
 
-    this.commandeService.getCommandes().subscribe({
-      next: (data) => {
-        console.log('Toutes les commandes:', data);
-        this.commandes = data.filter(c => c.clientId === utilisateur!.id);
-        console.log('Mes commandes:', this.commandes);
-
-        const commandesEnMemoire = this.commandeService.getCommandesEnMemoire();
-        const mesCommandesMemoire = commandesEnMemoire.filter(c => c.clientId === utilisateur!.id);
-
-        this.commandes = [...this.commandes, ...mesCommandesMemoire]
-          .sort((a, b) => b.id - a.id);
-
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Erreur chargement commandes', err)
-    });
+    if (utilisateur) {
+      this.commandeService.getCommandesByClient(utilisateur.uid).subscribe({
+        next: (data) => {
+          console.log('Mes commandes:', data);
+          this.commandes = data.sort((a, b) => b.id! - a.id!);
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Erreur chargement commandes', err)
+      });
+    }
   }
 
   getStatutLibelle(statut: string): string {

@@ -87,17 +87,23 @@ export class RecuperationComponent {
       return;
     }
 
-    this.authService.reinitialiserMotDePasse(this.email, this.nouveauMotDePasse, this.utilisateurTrouve!);
-    this.succes = true;
-    this.snackBar.open('Mot de passe réinitialisé avec succès !', undefined, {
-      duration: 3000,
-      verticalPosition: 'bottom',
-      horizontalPosition: 'center'
+    this.authService.reinitialiserMotDePasse(this.email, this.nouveauMotDePasse).subscribe({
+      next: () => {
+        this.succes = true;
+        this.snackBar.open('Mot de passe réinitialisé avec succès !', undefined, {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.router.navigate(['/auth/login']);
+        }, 2000);
+      },
+      error: () => {
+        this.erreur = 'Erreur lors de la réinitialisation.';
+        this.cdr.detectChanges();
+      }
     });
-    this.cdr.detectChanges();
-
-    setTimeout(() => {
-      this.router.navigate(['/auth/login']);
-    }, 2000);
   }
 }

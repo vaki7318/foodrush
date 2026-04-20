@@ -42,7 +42,7 @@ export class DashboardRestateurateurComponent implements OnInit {
 
     this.restaurantService.getRestaurants().subscribe({
       next: (data) => {
-        this.restaurants = data.filter(r => r.proprietaireId === utilisateur!.id);
+        this.restaurants = data.filter(r => r.proprietaireId === utilisateur!.uid);
         if (this.restaurants.length > 0) {
           this.restaurant = this.restaurants[0];
           this.restaurantSelectionne = this.restaurants[0];
@@ -61,15 +61,9 @@ export class DashboardRestateurateurComponent implements OnInit {
       }
     });
 
-    this.commandeService.getCommandes().subscribe({
+    this.commandeService.getCommandesByRestaurant(restaurantId).subscribe({
       next: (commandes) => {
-        const commandesJSON = commandes.filter(c => c.restaurantId === restaurantId);
-        const commandesMemoire = this.commandeService.getCommandesEnMemoire()
-          .filter(c => c.restaurantId === restaurantId);
-
-        this.commandes = [...commandesJSON, ...commandesMemoire]
-          .sort((a, b) => b.id - a.id);
-
+        this.commandes = commandes.sort((a, b) => b.id! - a.id!);
         this.cdr.detectChanges();
       }
     });
@@ -105,13 +99,18 @@ export class DashboardRestateurateurComponent implements OnInit {
   }
 
   changerStatut(commande: Commande): void {
+    let nouveauStatut = commande.statut;
     if (commande.statut === 'en_attente') {
-      commande.statut = 'en_preparation';
+      nouveauStatut = 'en_preparation';
     } else if (commande.statut === 'en_preparation') {
-      commande.statut = 'livree';
+      nouveauStatut = 'livree';
     }
-    this.commandeService.mettreAJourCommande(commande);
-    this.cdr.detectChanges();
+    this.commandeService.mettreAJourStatut(commande.id!, nouveauStatut).subscribe({
+      next: (cmd) => {
+        commande.statut = cmd.statut;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   getBoutonStatut(statut: string): string {

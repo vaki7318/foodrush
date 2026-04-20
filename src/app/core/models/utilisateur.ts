@@ -1,8 +1,7 @@
 export interface Utilisateur {
-  id: number;
+  uid: string;
   nom: string;
   email: string;
-  motDePasse: string;
   role: 'client' | 'restaurateur';
   telephone?: string;
 }
