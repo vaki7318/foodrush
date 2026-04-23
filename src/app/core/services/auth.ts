@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
 import { Utilisateur } from '../models/utilisateur';
 import { environment } from '../../../environments/environment';
@@ -109,11 +109,6 @@ export class AuthService {
 
   estRestaurateur(): boolean {
     return this.getUtilisateurConnecte()?.role === 'restaurateur';
-  }
-
-  trouverParEmail(email: string): Observable<Utilisateur | null> {
-    return this.http.get<Utilisateur[]>(`${this.apiUrl}/users`)
-      .pipe(map(users => users.find(u => u.email === email) ?? null));
   }
 
   reinitialiserMotDePasse(email: string, nouveauMotDePasse: string): Observable<any> {

@@ -14,22 +14,14 @@
       Mot de passe réinitialisé avec succès ! Redirection...
     </div>
 
-    <!-- Étape 1 : Saisie de l'email -->
-    <ng-container *ngIf="etape === 'email' && !succes">
-      <p class="instruction">Entrez l'adresse email associée à votre compte.</p>
+    <ng-container *ngIf="!succes">
+      <p class="instruction">Entrez votre email et choisissez un nouveau mot de passe.</p>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
         <input matInput type="email" [(ngModel)]="email" placeholder="exemple@email.com">
         <mat-icon matSuffix>email</mat-icon>
       </mat-form-field>
-
-      <button class="btn-primary" (click)="verifierEmail()">Vérifier l'email</button>
-    </ng-container>
-
-    <!-- Étape 2 : Nouveau mot de passe -->
-    <ng-container *ngIf="etape === 'reset' && !succes">
-      <p class="instruction">Définissez votre nouveau mot de passe.</p>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Nouveau mot de passe</mat-label>
@@ -47,7 +39,7 @@
         </button>
       </mat-form-field>
 
-      <button class="btn-primary" (click)="reinitialiserMotDePasse()">Réinitialiser</button>
+      <button class="btn-primary" (click)="reinitialiserMotDePasse()">Réinitialiser le mot de passe</button>
     </ng-container>
 
     <p class="login-lien">
