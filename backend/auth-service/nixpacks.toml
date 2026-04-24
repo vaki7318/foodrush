@@ -1,2 +1,0 @@
-[phases.build]
-cmds = ["mvn -B -DskipTests clean package"]

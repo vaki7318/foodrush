@@ -1,0 +1,5 @@
+[build]
+buildCommand = "mvn -B -DskipTests clean package"
+
+[deploy]
+startCommand = "java -jar target/business-service-1.0.0.jar --server.port=$PORT"
