@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/foodrush/browser",
+    "public": "dist/restos/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
