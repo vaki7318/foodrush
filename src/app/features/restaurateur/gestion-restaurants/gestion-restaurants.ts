@@ -221,7 +221,7 @@ export class GestionRestaurantsComponent implements OnInit {
     };
 
     reader.onerror = () => {
-      this.snackBar.open('Erreur lors du chargement de l'image.', undefined, { duration: 2500 });
+      this.snackBar.open("Erreur lors du chargement de l'image.", undefined, { duration: 2500 });
     };
 
     reader.readAsDataURL(file);
