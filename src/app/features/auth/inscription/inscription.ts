@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -41,7 +41,7 @@ export class InscriptionComponent {
   cacheMotDePasse = true;
   submitted = false;
 
-  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private cdr: ChangeDetectorRef) {}
 
   private isValidPassword(pwd: string): boolean {
     return pwd.length >= 4;
@@ -112,6 +112,7 @@ export class InscriptionComponent {
           verticalPosition: 'bottom',
           horizontalPosition: 'center'
         });
+        this.cdr.detectChanges();
       }
     });
   }
