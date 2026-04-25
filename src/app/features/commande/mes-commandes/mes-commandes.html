@@ -17,6 +17,7 @@
       <div class="commande-header">
         <div>
           <h3>Commande #{{ commande.id }}</h3>
+          <p class="restaurant">🍽️ {{ restaurantsMap.get(commande.restaurantId)?.nom }} — {{ restaurantsMap.get(commande.restaurantId)?.adresse }}</p>
           <p class="date">📅 {{ commande.dateCommande }}</p>
         </div>
         <span class="statut" [style.color]="getStatutCouleur(commande.statut)">

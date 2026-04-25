@@ -97,6 +97,24 @@ export class DetailRestaurantComponent implements OnInit {
       return;
     }
 
+    if (this.panier.length > 0 && this.panier[0].plat.restaurantId !== plat.restaurantId) {
+      this.snackBar.open(
+        'Votre panier contient des articles d\'un autre restaurant.',
+        'Vider le panier',
+        { duration: 6000 }
+      ).onAction().subscribe(() => {
+        this.panier = [];
+        localStorage.removeItem('panier');
+        window.dispatchEvent(new Event('panierUpdated'));
+        this.panier.push({ plat, quantite: 1 });
+        localStorage.setItem('panier', JSON.stringify(this.panier));
+        window.dispatchEvent(new Event('panierUpdated'));
+        this.snackBar.open(`${plat.nom} ajouté au panier !`, 'OK', { duration: 2000 });
+        this.cdr.detectChanges();
+      });
+      return;
+    }
+
     const existant = this.panier.find(p => p.plat.id === plat.id);
     if (existant) {
       existant.quantite++;

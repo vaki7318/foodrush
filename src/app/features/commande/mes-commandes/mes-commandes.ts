@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { CommandeService } from '../../../core/services/commande';
 import { AuthService } from '../../../core/services/auth';
+import { RestaurantService } from '../../../core/services/restaurant';
+import { Restaurant } from '../../../core/models/restaurant';
 import { Commande } from '../../../core/models/commande';
 
 @Component({
@@ -20,10 +22,12 @@ import { Commande } from '../../../core/models/commande';
 export class MesCommandesComponent implements OnInit {
 
   commandes: Commande[] = [];
+  restaurantsMap: Map<number, Restaurant> = new Map();
 
   constructor(
     private commandeService: CommandeService,
     private authService: AuthService,
+    private restaurantService: RestaurantService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -34,8 +38,13 @@ export class MesCommandesComponent implements OnInit {
     if (utilisateur) {
       this.commandeService.getCommandesByClient(utilisateur.email).subscribe({
         next: (data) => {
-          console.log('Mes commandes:', data);
           this.commandes = data.sort((a, b) => b.id! - a.id!);
+          const ids = [...new Set(data.map(c => c.restaurantId))];
+          ids.forEach(id => {
+            this.restaurantService.getRestaurantById(id).subscribe({
+              next: (r) => { this.restaurantsMap.set(id, r); this.cdr.detectChanges(); }
+            });
+          });
           this.cdr.detectChanges();
         },
         error: (err) => console.error('Erreur chargement commandes', err)
