@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="insert-restaurants-mock" author="foodrush">
+        <insert tableName="restaurants">
+            <column name="nom" value="Chez Carlos"/>
+            <column name="description" value="Cuisine mexicaine authentique"/>
+            <column name="adresse" value="123 Rue Principale, Trois-Rivières"/>
+            <column name="telephone" value="819-111-1111"/>
+            <column name="photo" value="images/restaurant1.jpg"/>
+            <column name="categorie" value="Mexicain"/>
+            <column name="proprietaire_id" value="demo@foodrush.com"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="nom" value="La Table de Sophie"/>
+            <column name="description" value="Cuisine française raffinée"/>
+            <column name="adresse" value="456 Boulevard des Forges, Trois-Rivières"/>
+            <column name="telephone" value="819-222-2222"/>
+            <column name="photo" value="images/restaurant2.jpg"/>
+            <column name="categorie" value="Français"/>
+            <column name="proprietaire_id" value="demo@foodrush.com"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="nom" value="Chez Carlos"/>
+            <column name="description" value="Cuisine mexicaine authentique"/>
+            <column name="adresse" value="456 Avenue des Pins, Trois-Rivières"/>
+            <column name="telephone" value="819-333-3333"/>
+            <column name="photo" value="images/restaurant1.jpg"/>
+            <column name="categorie" value="Mexicain"/>
+            <column name="proprietaire_id" value="demo@foodrush.com"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

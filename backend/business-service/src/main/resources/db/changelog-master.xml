@@ -7,4 +7,5 @@
     <include file="classpath:db/changelog/create-plats-table.xml"/>
     <include file="classpath:db/changelog/create-commandes-table.xml"/>
     <include file="classpath:db/changelog/create-ligne-commandes-table.xml"/>
+    <include file="classpath:db/changelog/insert-restaurants-mock.xml"/>
 </databaseChangeLog>
