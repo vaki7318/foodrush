@@ -26,7 +26,6 @@ public class Commande {
     @Column(name = "adresse_livraison")
     private String adresseLivraison;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "commande_id")
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LigneCommande> lignes;
 }

@@ -11,7 +11,12 @@ public class CommandeService {
     public CommandeService(CommandeRepository repo) { this.repo = repo; }
     public List<Commande> getByClient(String id) { return repo.findByClientId(id); }
     public List<Commande> getByRestaurant(Long id) { return repo.findByRestaurantId(id); }
-    public Commande create(Commande c) { return repo.save(c); }
+    public Commande create(Commande c) {
+        if (c.getLignes() != null) {
+            c.getLignes().forEach(l -> l.setCommande(c));
+        }
+        return repo.save(c);
+    }
     public Commande updateStatut(Long id, String statut) {
         Commande c = repo.findById(id).orElse(null);
         if (c == null) return null;
