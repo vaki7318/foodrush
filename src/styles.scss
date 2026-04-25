@@ -10,6 +10,17 @@
   color: white !important;
 }
 
+/* Snackbar action button */
+.mat-mdc-snack-bar-action .mdc-button__label {
+  color: #ffcc80;
+}
+.mat-mdc-snack-bar-action:hover .mdc-button__label {
+  color: #ffa726;
+}
+.mat-mdc-snack-bar-action::before {
+  background-color: transparent !important;
+}
+
 /* Fix card shadow */
 .mat-mdc-card {
   box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
