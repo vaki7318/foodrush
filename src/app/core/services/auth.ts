@@ -9,6 +9,7 @@ interface AuthResponse {
   nom: string;
   email: string;
   role: string;
+  telephone?: string;
 }
 
 @Injectable({
@@ -31,23 +32,20 @@ export class AuthService {
               uid: '',
               nom: response.nom,
               email: response.email,
-              role: response.role as 'client' | 'restaurateur'
+              role: response.role as 'client' | 'restaurateur',
+              telephone: response.telephone
             };
             this.utilisateurConnecte = user;
             localStorage.setItem('utilisateur', JSON.stringify(user));
           }
         }),
-        map(response => {
-          if (response.token) {
-            return {
-              uid: '',
-              nom: response.nom,
-              email: response.email,
-              role: response.role as 'client' | 'restaurateur'
-            };
-          }
-          return null;
-        })
+        map(response => response.token ? {
+          uid: '',
+          nom: response.nom,
+          email: response.email,
+          role: response.role as 'client' | 'restaurateur',
+          telephone: response.telephone
+        } : null)
       );
   }
 
@@ -66,7 +64,8 @@ export class AuthService {
             uid: '',
             nom: response.nom,
             email: response.email,
-            role: response.role as 'client' | 'restaurateur'
+            role: response.role as 'client' | 'restaurateur',
+            telephone: response.telephone
           };
           this.utilisateurConnecte = user;
           localStorage.setItem('utilisateur', JSON.stringify(user));
@@ -76,9 +75,40 @@ export class AuthService {
         uid: '',
         nom: response.nom,
         email: response.email,
-        role: response.role as 'client' | 'restaurateur'
+        role: response.role as 'client' | 'restaurateur',
+        telephone: response.telephone
       } : null)
     );
+  }
+
+  mettreAJourProfilBackend(data: { nom: string; email: string; telephone: string }): Observable<Utilisateur> {
+    return this.http.put<AuthResponse>(`${this.apiUrl}/auth/update`, data).pipe(
+      tap(response => {
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+          const user: Utilisateur = {
+            uid: '',
+            nom: response.nom,
+            email: response.email,
+            role: response.role as 'client' | 'restaurateur',
+            telephone: response.telephone
+          };
+          this.utilisateurConnecte = user;
+          localStorage.setItem('utilisateur', JSON.stringify(user));
+        }
+      }),
+      map(response => ({
+        uid: '',
+        nom: response.nom,
+        email: response.email,
+        role: response.role as 'client' | 'restaurateur',
+        telephone: response.telephone
+      }))
+    );
+  }
+
+  supprimerCompte(): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/auth/delete`);
   }
 
   logout(): void {
@@ -112,10 +142,7 @@ export class AuthService {
   }
 
   reinitialiserMotDePasse(email: string, nouveauMotDePasse: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/recover`, {
-      email,
-      nouveauMotDePasse: nouveauMotDePasse
-    });
+    return this.http.post(`${this.apiUrl}/auth/recover`, { email, nouveauMotDePasse });
   }
 
   mettreAJourProfil(utilisateur: Utilisateur): void {

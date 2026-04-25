@@ -48,7 +48,7 @@ export class InscriptionComponent {
   }
 
   private isValidPhone(tel: string): boolean {
-    return /^(\+?1\s?)?(\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}$/.test(tel);
+    return tel.length >= 7 && tel.length <= 15 && /^[0-9+\-. ()]+$/.test(tel);
   }
 
   inscrire(): void {
@@ -106,7 +106,7 @@ export class InscriptionComponent {
         }
       },
       error: (err) => {
-        this.erreur = 'Erreur lors de l\'inscription.';
+        this.erreur = err?.error?.message || 'Erreur lors de l\'inscription.';
         this.snackBar.open(this.erreur, undefined, {
           duration: 4000,
           verticalPosition: 'bottom',

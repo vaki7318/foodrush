@@ -4,6 +4,7 @@ import com.foodrush.auth.dto.AuthResponse;
 import com.foodrush.auth.dto.RecoverRequest;
 import com.foodrush.auth.dto.SignInRequest;
 import com.foodrush.auth.dto.SignUpRequest;
+import com.foodrush.auth.dto.UpdateProfileRequest;
 import com.foodrush.auth.model.User;
 import com.foodrush.auth.repository.UserRepository;
 import com.foodrush.auth.security.JwtUtil;
@@ -25,7 +26,7 @@ public class AuthServiceImpl {
     @Transactional
     public AuthResponse register(SignUpRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Un compte existe déjà avec cet email: " + request.getEmail());
+            throw new IllegalArgumentException("Un compte existe déjà avec cet email.");
         }
 
         User user = new User();
@@ -38,27 +39,54 @@ public class AuthServiceImpl {
         User savedUser = userRepository.save(user);
         String token = jwtUtil.generateToken(savedUser);
 
-        return new AuthResponse(token, savedUser.getNom(), savedUser.getEmail(), savedUser.getRole());
+        return new AuthResponse(token, savedUser.getNom(), savedUser.getEmail(), savedUser.getRole(), savedUser.getTelephone());
     }
 
     public AuthResponse login(SignInRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("Email ou mot de passe incorrect"));
+                .orElseThrow(() -> new UsernameNotFoundException("Email ou mot de passe incorrect."));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("Email ou mot de passe incorrect");
+            throw new BadCredentialsException("Email ou mot de passe incorrect.");
         }
 
         String token = jwtUtil.generateToken(user);
-        return new AuthResponse(token, user.getNom(), user.getEmail(), user.getRole());
+        return new AuthResponse(token, user.getNom(), user.getEmail(), user.getRole(), user.getTelephone());
     }
 
     @Transactional
     public void recoverPassword(RecoverRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("Aucun compte associé à cet email: " + request.getEmail()));
+                .orElseThrow(() -> new UsernameNotFoundException("Aucun compte associé à cet email."));
 
         user.setPassword(passwordEncoder.encode(request.getNouveauMotDePasse()));
         userRepository.save(user);
+    }
+
+    @Transactional
+    public AuthResponse updateProfile(String currentEmail, UpdateProfileRequest request) {
+        User user = userRepository.findByEmail(currentEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur introuvable."));
+
+        if (!currentEmail.equals(request.getEmail()) &&
+                userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Cet email est déjà utilisé par un autre compte.");
+        }
+
+        user.setNom(request.getNom());
+        user.setEmail(request.getEmail());
+        user.setTelephone(request.getTelephone());
+
+        User savedUser = userRepository.save(user);
+        String token = jwtUtil.generateToken(savedUser);
+
+        return new AuthResponse(token, savedUser.getNom(), savedUser.getEmail(), savedUser.getRole(), savedUser.getTelephone());
+    }
+
+    @Transactional
+    public void deleteAccount(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur introuvable."));
+        userRepository.delete(user);
     }
 }

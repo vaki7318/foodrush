@@ -4,6 +4,7 @@ import com.foodrush.auth.dto.AuthResponse;
 import com.foodrush.auth.dto.RecoverRequest;
 import com.foodrush.auth.dto.SignInRequest;
 import com.foodrush.auth.dto.SignUpRequest;
+import com.foodrush.auth.dto.UpdateProfileRequest;
 import com.foodrush.auth.service.AuthServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 
 @RestController
@@ -36,5 +38,17 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> recoverPassword(@Valid @RequestBody RecoverRequest request) {
         authService.recoverPassword(request);
         return ResponseEntity.ok(Map.of("message", "Mot de passe mis à jour avec succès"));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<AuthResponse> updateProfile(@RequestBody UpdateProfileRequest request, Principal principal) {
+        AuthResponse response = authService.updateProfile(principal.getName(), request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, String>> deleteAccount(Principal principal) {
+        authService.deleteAccount(principal.getName());
+        return ResponseEntity.ok(Map.of("message", "Compte supprimé avec succès"));
     }
 }

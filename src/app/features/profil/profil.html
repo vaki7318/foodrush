@@ -47,6 +47,11 @@
         <mat-icon>lock</mat-icon>
         {{ modeChangementMdp ? 'Annuler' : 'Changer le mot de passe' }}
       </button>
+
+      <button class="btn-danger" (click)="supprimerCompte()">
+        <mat-icon>delete_forever</mat-icon>
+        Supprimer mon compte
+      </button>
     </div>
 
     <!-- Mode édition -->

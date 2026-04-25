@@ -61,8 +61,13 @@ export class LoginComponent {
           this.cdr.detectChanges();
         }
       },
-      error: () => {
-        this.erreur = 'Une erreur est survenue. Veuillez réessayer.';
+      error: (err) => {
+        this.erreur = err?.error?.message || 'Email ou mot de passe incorrect.';
+        this.snackBar.open(this.erreur, undefined, {
+          duration: 4000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
         this.cdr.detectChanges();
       }
     });

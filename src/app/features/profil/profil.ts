@@ -87,26 +87,27 @@ export class ProfilComponent implements OnInit {
       return;
     }
 
-    if (this.telephone && !/^(\+?1\s?)?(\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}$/.test(this.telephone)) {
-      this.erreur = 'Téléphone invalide (ex: 514-000-0000).';
-      return;
-    }
-
-    if (this.utilisateur) {
-      this.utilisateur.nom = this.nom.trim();
-      this.utilisateur.email = this.email.trim();
-      this.utilisateur.telephone = this.telephone.trim();
-
-      this.authService.mettreAJourProfil(this.utilisateur);
-      this.modeEdition = false;
-
-      this.snackBar.open('Profil mis à jour avec succès !', undefined, {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center'
-      });
-      this.cdr.detectChanges();
-    }
+    this.authService.mettreAJourProfilBackend({
+      nom: this.nom.trim(),
+      email: this.email.trim(),
+      telephone: this.telephone.trim()
+    }).subscribe({
+      next: (utilisateur) => {
+        this.utilisateur = utilisateur;
+        this.modeEdition = false;
+        this.chargerDonnees();
+        this.snackBar.open('Profil mis à jour avec succès !', undefined, {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.erreur = err?.error?.message || 'Erreur lors de la mise à jour du profil.';
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   toggleChangementMdp(): void {
@@ -121,14 +122,11 @@ export class ProfilComponent implements OnInit {
 
     if (!this.utilisateur) return;
 
-    // Avec le backend, on ne vérifie pas le mot de passe localement
-    // Le backend s'en charge
     if (this.nouveauMotDePasse.length < 4) {
       this.erreur = 'Le nouveau mot de passe doit contenir au moins 4 caractères.';
       return;
     }
 
-    // Appel au backend pour changer le mot de passe
     this.authService.reinitialiserMotDePasse(this.utilisateur.email, this.nouveauMotDePasse).subscribe({
       next: () => {
         this.modeChangementMdp = false;
@@ -143,6 +141,29 @@ export class ProfilComponent implements OnInit {
       },
       error: () => {
         this.erreur = 'Erreur lors de la modification du mot de passe.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  supprimerCompte(): void {
+    const confirmed = window.confirm(
+      'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.'
+    );
+    if (!confirmed) return;
+
+    this.authService.supprimerCompte().subscribe({
+      next: () => {
+        this.authService.logout();
+        this.snackBar.open('Compte supprimé avec succès.', undefined, {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.erreur = 'Erreur lors de la suppression du compte.';
         this.cdr.detectChanges();
       }
     });
