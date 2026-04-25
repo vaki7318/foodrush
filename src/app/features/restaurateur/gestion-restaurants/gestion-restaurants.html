@@ -107,7 +107,12 @@
   <!-- Liste des restaurants -->
   <div class="restaurants-liste" *ngIf="!afficherFormulaire">
 
-    <div class="aucun-restaurant" *ngIf="restaurants().length === 0">
+    <div class="aucun-restaurant" *ngIf="chargement">
+      <p>⏳</p>
+      <p>Chargement en cours...</p>
+    </div>
+
+    <div class="aucun-restaurant" *ngIf="!chargement && restaurants().length === 0">
       <p>🏪</p>
       <p>Vous n'avez pas encore de restaurants.</p>
     </div>

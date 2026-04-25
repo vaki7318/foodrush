@@ -24,6 +24,7 @@ import { Restaurant } from '../../../core/models/restaurant';
 export class GestionRestaurantsComponent implements OnInit {
 
   restaurants = signal<Restaurant[]>([]);
+  chargement = true;
   afficherFormulaire = false;
   modeEdition = false;
   submittedRestaurant = false;
@@ -55,12 +56,16 @@ export class GestionRestaurantsComponent implements OnInit {
 
     if (!utilisateur) {
       this.restaurants.set([]);
+      this.chargement = false;
       return;
     }
 
     this.restaurantService.getRestaurantsByProprietaire(utilisateur.email).subscribe({
-      next: (data) => this.restaurants.set(data),
-      error: () => this.snackBar.open('Erreur lors du chargement des restaurants', undefined, { duration: 3000 })
+      next: (data) => { this.restaurants.set(data); this.chargement = false; },
+      error: () => {
+        this.chargement = false;
+        this.snackBar.open('Erreur lors du chargement des restaurants', undefined, { duration: 3000 });
+      }
     });
   }
 
