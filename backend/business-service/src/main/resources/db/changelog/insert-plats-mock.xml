@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="insert-plats-mock" author="foodrush">
+        <!-- Plats du restaurant Chez Carlos (ID 1) -->
+        <insert tableName="plats">
+            <column name="nom" value="Tacos au boeuf"/>
+            <column name="description" value="Tacos garnis de boeuf épicé, salsa et guacamole"/>
+            <column name="prix" value="12.99"/>
+            <column name="photo" value="images/plat1.jpg"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" value="1"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Quesadilla au poulet"/>
+            <column name="description" value="Quesadilla croustillante au poulet grillé et fromage"/>
+            <column name="prix" value="10.99"/>
+            <column name="photo" value="images/plat2.jpg"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" value="1"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Nachos"/>
+            <column name="description" value="Nachos avec fromage fondu et jalapeños"/>
+            <column name="prix" value="8.99"/>
+            <column name="photo" value="images/plat3.jpg"/>
+            <column name="categorie" value="Entrée"/>
+            <column name="restaurant_id" value="1"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <!-- Plats du restaurant La Table de Sophie (ID 2) -->
+        <insert tableName="plats">
+            <column name="nom" value="Soupe à l'oignon"/>
+            <column name="description" value="Soupe à l'oignon gratinée traditionnelle"/>
+            <column name="prix" value="9.99"/>
+            <column name="photo" value="images/plat4.jpg"/>
+            <column name="categorie" value="Entrée"/>
+            <column name="restaurant_id" value="2"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Boeuf bourguignon"/>
+            <column name="description" value="Boeuf mijoté au vin rouge avec légumes"/>
+            <column name="prix" value="18.99"/>
+            <column name="photo" value="images/plat5.jpg"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" value="2"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Crème brûlée"/>
+            <column name="description" value="Crème brûlée à la vanille"/>
+            <column name="prix" value="6.99"/>
+            <column name="photo" value="images/plat6.jpg"/>
+            <column name="categorie" value="Dessert"/>
+            <column name="restaurant_id" value="2"/>
+            <column name="disponible" value="true"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

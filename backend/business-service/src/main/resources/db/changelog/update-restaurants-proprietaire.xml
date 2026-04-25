@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="update-restaurants-proprietaire" author="foodrush">
+        <!-- Carlos possède les restaurants 1 et 3 -->
+        <update tableName="restaurants">
+            <column name="proprietaire_id" value="carlos@email.com"/>
+            <where>nom = 'Chez Carlos' AND adresse = '123 Rue Principale, Trois-Rivières'</where>
+        </update>
+        <update tableName="restaurants">
+            <column name="proprietaire_id" value="carlos@email.com"/>
+            <where>nom = 'Chez Carlos' AND adresse = '456 Avenue des Pins, Trois-Rivières'</where>
+        </update>
+        <!-- Sophie possède le restaurant 2 -->
+        <update tableName="restaurants">
+            <column name="proprietaire_id" value="sophie@email.com"/>
+            <where>nom = 'La Table de Sophie'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>
