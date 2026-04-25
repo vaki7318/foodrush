@@ -52,12 +52,12 @@ export class GestionPlatsComponent implements OnInit {
 
   ngOnInit(): void {
     const utilisateur = this.authService.getUtilisateurConnecte();
+    if (!utilisateur) return;
 
-    this.restaurantService.getRestaurants().subscribe({
+    this.restaurantService.getRestaurantsByProprietaire(utilisateur.email).subscribe({
       next: (data) => {
-        this.restaurants = data.filter(r => r.proprietaireId === utilisateur!.uid);
+        this.restaurants = data;
 
-        // Si le restaurateur a au moins un restaurant, on sélectionne le premier par défaut
         if (this.restaurants.length > 0) {
           this.restaurantSelectionneId = this.restaurants[0].id;
           this.chargerPlats();
@@ -67,7 +67,8 @@ export class GestionPlatsComponent implements OnInit {
         }
 
         this.cdr.detectChanges();
-      }
+      },
+      error: () => this.snackBar.open('Erreur lors du chargement des restaurants', 'OK', { duration: 3000 })
     });
   }
 
@@ -81,13 +82,9 @@ export class GestionPlatsComponent implements OnInit {
       next: (data) => {
         this.plats = data;
         this.cdr.detectChanges();
-      }
+      },
+      error: () => this.snackBar.open('Erreur lors du chargement des plats', 'OK', { duration: 3000 })
     });
-  }
-
-  getPlatsLocaux(): Plat[] {
-    const data = localStorage.getItem('plats_ajoutes');
-    return data ? JSON.parse(data) : [];
   }
 
   ouvrirFormulaire(): void {
@@ -100,7 +97,7 @@ export class GestionPlatsComponent implements OnInit {
 
     this.modeEdition = false;
     this.platForm = {
-      id: Date.now(),
+      id: 0,
       nom: '',
       description: '',
       prix: 0,
@@ -121,8 +118,6 @@ export class GestionPlatsComponent implements OnInit {
   }
 
   sauvegarderPlat(): void {
-    console.log('sauvegarderPlat appelé', this.platForm);
-
     if (!this.platForm.nom || !this.platForm.categorie) {
       this.snackBar.open('Veuillez remplir le nom et la catégorie', 'OK', { duration: 3000 });
       return;
@@ -133,61 +128,66 @@ export class GestionPlatsComponent implements OnInit {
       return;
     }
 
-    const platASauvegarder = {
+    const platASauvegarder: Plat = {
       ...this.platForm,
       restaurantId: Number(this.platForm.restaurantId)
     };
 
     if (!platASauvegarder.photo) {
-      platASauvegarder.photo = 'https://placehold.co/300x200?text=' + platASauvegarder.nom;
+      platASauvegarder.photo = 'https://placehold.co/300x200?text=' + encodeURIComponent(platASauvegarder.nom);
     }
 
     if (this.modeEdition) {
-      const index = this.plats.findIndex(p => p.id === platASauvegarder.id);
-      if (index !== -1) {
-        this.plats[index] = platASauvegarder;
-      }
-      this.snackBar.open('Plat modifié avec succès !', 'OK', { duration: 2000 });
+      this.platService.updatePlat(platASauvegarder.id, platASauvegarder).subscribe({
+        next: (updated) => {
+          const index = this.plats.findIndex(p => p.id === updated.id);
+          if (index !== -1) this.plats[index] = updated;
+          this.plats = [...this.plats];
+          this.snackBar.open('Plat modifié avec succès !', 'OK', { duration: 2000 });
+          this.afficherFormulaire = false;
+          this.cdr.detectChanges();
+        },
+        error: () => this.snackBar.open('Erreur lors de la modification', 'OK', { duration: 3000 })
+      });
     } else {
-      this.plats = [...this.plats, platASauvegarder];
-      this.snackBar.open('Plat ajouté avec succès !', 'OK', { duration: 2000 });
+      this.platService.createPlat(platASauvegarder).subscribe({
+        next: (created) => {
+          this.plats = [...this.plats, created];
+          this.snackBar.open('Plat ajouté avec succès !', 'OK', { duration: 2000 });
+          this.afficherFormulaire = false;
+          this.cdr.detectChanges();
+        },
+        error: () => this.snackBar.open("Erreur lors de l'ajout du plat", 'OK', { duration: 3000 })
+      });
     }
-
-    // Sauvegarder les plats ajoutés dans localStorage
-    const platsLocauxAutresRestaurants = this.getPlatsLocaux()
-      .filter(p => p.restaurantId !== platASauvegarder.restaurantId);
-    const platsNouveaux = this.plats.filter(p => p.id > 1000);
-    localStorage.setItem('plats_ajoutes', JSON.stringify([...platsLocauxAutresRestaurants, ...platsNouveaux]));
-
-    this.afficherFormulaire = false;
-    this.cdr.detectChanges();
   }
 
   supprimerPlat(id: number): void {
-    const ok = confirm("Confirmer la suppression de ce plat ?");
-    if (!ok) return;
+    if (!confirm('Confirmer la suppression de ce plat ?')) return;
 
-    this.plats = this.plats.filter(p => p.id !== id);
-
-    const platsLocaux = this.getPlatsLocaux().filter(p => p.id !== id);
-    localStorage.setItem('plats_ajoutes', JSON.stringify(platsLocaux));
-
-    this.snackBar.open('Plat supprimé', 'OK', { duration: 2000 });
-    this.cdr.detectChanges();
+    this.platService.deletePlat(id).subscribe({
+      next: () => {
+        this.plats = this.plats.filter(p => p.id !== id);
+        this.snackBar.open('Plat supprimé', 'OK', { duration: 2000 });
+        this.cdr.detectChanges();
+      },
+      error: () => this.snackBar.open('Erreur lors de la suppression', 'OK', { duration: 3000 })
+    });
   }
+
   onPhotoSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      this.snackBar.open("Veuillez choisir une image.", 'OK', { duration: 2500 });
+      this.snackBar.open('Veuillez choisir une image.', 'OK', { duration: 2500 });
       return;
     }
 
     const reader = new FileReader();
     reader.onload = () => {
-      this.platForm.photo = String(reader.result); // base64 image
+      this.platForm.photo = String(reader.result);
       this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
