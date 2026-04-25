@@ -47,18 +47,24 @@
     </div>
   </div>
 
+  <!-- Chargement plats -->
+  <div class="aucun-plat" *ngIf="chargementPlats">
+    <mat-icon>hourglass_empty</mat-icon>
+    <p>...</p>
+  </div>
+
   <!-- Aucun plat -->
-  <div class="aucun-plat" *ngIf="platsFiltres.length === 0">
+  <div class="aucun-plat" *ngIf="!chargementPlats && platsFiltres.length === 0">
     <mat-icon>no_meals</mat-icon>
     <p>Aucun plat disponible dans cette catégorie.</p>
   </div>
 
 </div>
 
-<!-- Chargement -->
+<!-- Chargement restaurant -->
 <div class="non-trouve" *ngIf="chargement">
   <mat-icon>hourglass_empty</mat-icon>
-  <p>Chargement du restaurant...</p>
+  <p>...</p>
 </div>
 
 <!-- Restaurant non trouvé -->
