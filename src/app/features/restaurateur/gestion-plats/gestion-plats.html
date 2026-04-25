@@ -101,7 +101,11 @@
   <!-- Liste des plats -->
   <div class="plats-liste" *ngIf="!afficherFormulaire">
 
-    <div class="aucun-plat" *ngIf="plats.length === 0">
+    <div class="aucun-plat" *ngIf="chargement">
+      <p>⏳ Chargement en cours...</p>
+    </div>
+
+    <div class="aucun-plat" *ngIf="!chargement && plats.length === 0">
       <p>Vous n'avez pas encore de plats.</p>
     </div>
 

@@ -26,6 +26,7 @@ export class GestionPlatsComponent implements OnInit {
   restaurants: Restaurant[] = [];
   restaurantSelectionneId: number | null = null;
   plats: Plat[] = [];
+  chargement = true;
   afficherFormulaire = false;
   modeEdition = false;
 
@@ -64,26 +65,36 @@ export class GestionPlatsComponent implements OnInit {
         } else {
           this.restaurantSelectionneId = null;
           this.plats = [];
+          this.chargement = false;
         }
 
         this.cdr.detectChanges();
       },
-      error: () => this.snackBar.open('Erreur lors du chargement des restaurants', 'OK', { duration: 3000 })
+      error: () => {
+        this.chargement = false;
+        this.snackBar.open('Erreur lors du chargement des restaurants', 'OK', { duration: 3000 });
+      }
     });
   }
 
   chargerPlats(): void {
     if (!this.restaurantSelectionneId) {
       this.plats = [];
+      this.chargement = false;
       return;
     }
 
+    this.chargement = true;
     this.platService.getPlatsByRestaurant(this.restaurantSelectionneId).subscribe({
       next: (data) => {
         this.plats = data;
+        this.chargement = false;
         this.cdr.detectChanges();
       },
-      error: () => this.snackBar.open('Erreur lors du chargement des plats', 'OK', { duration: 3000 })
+      error: () => {
+        this.chargement = false;
+        this.snackBar.open('Erreur lors du chargement des plats', 'OK', { duration: 3000 });
+      }
     });
   }
 
