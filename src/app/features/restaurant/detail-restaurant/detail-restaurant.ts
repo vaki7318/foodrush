@@ -36,6 +36,7 @@ export class DetailRestaurantComponent implements OnInit {
   categories: string[] = [];
   categorieSelectionnee = 'Tous';
   panier: { plat: Plat, quantite: number }[] = [];
+  chargement = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,9 +57,14 @@ export class DetailRestaurantComponent implements OnInit {
     this.restaurantService.getRestaurantById(id).subscribe({
       next: (data) => {
         this.restaurant = data;
+        this.chargement = false;
         this.cdr.detectChanges();
       },
-      error: () => { this.restaurant = null; this.cdr.detectChanges(); }
+      error: () => {
+        this.restaurant = null;
+        this.chargement = false;
+        this.cdr.detectChanges();
+      }
     });
 
     this.platService.getPlatsByRestaurant(id).subscribe({

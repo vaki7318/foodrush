@@ -1,6 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { MatIconModule } from '@angular/material/icon';
 import { RestaurantService } from '../../../core/services/restaurant';
 import { PlatService } from '../../../core/services/plat';
@@ -21,36 +23,56 @@ import { Commande } from '../../../core/models/commande';
   templateUrl: './dashboard-restaurateur.html',
   styleUrl: './dashboard-restaurateur.scss'
 })
-export class DashboardRestateurateurComponent implements OnInit {
+export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
 
   restaurant: Restaurant | null = null;
   restaurants: Restaurant[] = [];
   restaurantSelectionne: Restaurant | null = null;
   plats: Plat[] = [];
   commandes: Commande[] = [];
+  chargement = true;
+  private routerSub!: Subscription;
 
   constructor(
     private restaurantService: RestaurantService,
     private platService: PlatService,
     private commandeService: CommandeService,
     private authService: AuthService,
+    private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    this.chargerRestaurants();
+    this.routerSub = this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd && e.urlAfterRedirects.includes('/restaurateur/dashboard'))
+    ).subscribe(() => this.chargerRestaurants());
+  }
+
+  ngOnDestroy(): void {
+    this.routerSub?.unsubscribe();
+  }
+
+  chargerRestaurants(): void {
     const utilisateur = this.authService.getUtilisateurConnecte();
     if (!utilisateur) return;
 
+    this.chargement = true;
     this.restaurantService.getRestaurantsByProprietaire(utilisateur.email).subscribe({
       next: (data) => {
         this.restaurants = data;
         if (this.restaurants.length > 0) {
-          this.restaurant = this.restaurants[0];
-          this.restaurantSelectionne = this.restaurants[0];
-          this.chargerDonnees(this.restaurant.id);
+          const selectionne = this.restaurantSelectionne
+            ? this.restaurants.find(r => r.id === this.restaurantSelectionne!.id) ?? this.restaurants[0]
+            : this.restaurants[0];
+          this.restaurant = selectionne;
+          this.restaurantSelectionne = selectionne;
+          this.chargerDonnees(selectionne.id);
         }
+        this.chargement = false;
         this.cdr.detectChanges();
-      }
+      },
+      error: () => { this.chargement = false; this.cdr.detectChanges(); }
     });
   }
 

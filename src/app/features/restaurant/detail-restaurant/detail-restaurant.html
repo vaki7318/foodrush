@@ -55,8 +55,14 @@
 
 </div>
 
+<!-- Chargement -->
+<div class="non-trouve" *ngIf="chargement">
+  <mat-icon>hourglass_empty</mat-icon>
+  <p>Chargement du restaurant...</p>
+</div>
+
 <!-- Restaurant non trouvé -->
-<div class="non-trouve" *ngIf="!restaurant">
+<div class="non-trouve" *ngIf="!chargement && !restaurant">
   <mat-icon>error_outline</mat-icon>
   <p>Restaurant introuvable.</p>
 </div>

@@ -16,12 +16,17 @@
     </div>
   </div>
 
-  <div class="pas-restaurant" *ngIf="!restaurant">
+  <div class="pas-restaurant" *ngIf="chargement">
+    <p>⏳</p>
+    <p>Chargement en cours...</p>
+  </div>
+
+  <div class="pas-restaurant" *ngIf="!chargement && !restaurant">
     <p>🏪</p>
     <p>Vous n'avez pas encore de restaurant enregistré.</p>
   </div>
 
-  <div *ngIf="restaurant">
+  <div *ngIf="!chargement && restaurant">
 
     <!-- Info restaurant -->
     <div class="restaurant-card">
