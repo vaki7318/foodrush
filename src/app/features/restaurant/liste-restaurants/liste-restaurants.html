@@ -21,10 +21,10 @@
   </div>
 
   <!-- Résultats -->
-  <p class="resultats">{{ restaurantsFiltres.length }} restaurant(s) trouvé(s)</p>
+  <p class="resultats" *ngIf="!chargement">{{ restaurantsFiltres.length }} restaurant(s) trouvé(s)</p>
 
   <!-- Liste -->
-  <div class="restaurants-grid">
+  <div class="restaurants-grid" *ngIf="!chargement">
     <div class="restaurant-card" *ngFor="let restaurant of restaurantsFiltres">
       <img [src]="restaurant.photo" [alt]="restaurant.nom" class="restaurant-img">
       <div class="restaurant-body">
