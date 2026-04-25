@@ -35,6 +35,7 @@ export class ListeRestaurantsComponent implements OnInit {
   categories: string[] = [];
   categorieSelectionnee = 'Tous';
   recherche = '';
+  chargement = true;
 
   constructor(
     private restaurantService: RestaurantService,
@@ -47,9 +48,14 @@ export class ListeRestaurantsComponent implements OnInit {
         this.restaurants = data;
         this.restaurantsFiltres = data;
         this.categories = ['Tous', ...new Set(data.map(r => r.categorie))];
+        this.chargement = false;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Erreur chargement restaurants', err)
+      error: (err) => {
+        this.chargement = false;
+        console.error('Erreur chargement restaurants', err);
+        this.cdr.detectChanges();
+      }
     });
   }
 

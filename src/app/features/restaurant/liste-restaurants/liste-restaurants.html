@@ -41,8 +41,14 @@
     </div>
   </div>
 
+  <!-- Chargement -->
+  <div class="aucun-resultat" *ngIf="chargement">
+    <mat-icon>hourglass_empty</mat-icon>
+    <p>Chargement en cours...</p>
+  </div>
+
   <!-- Aucun résultat -->
-  <div class="aucun-resultat" *ngIf="restaurantsFiltres.length === 0">
+  <div class="aucun-resultat" *ngIf="!chargement && restaurantsFiltres.length === 0">
     <mat-icon>search_off</mat-icon>
     <p>Aucun restaurant trouvé.</p>
   </div>
