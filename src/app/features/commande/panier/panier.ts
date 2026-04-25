@@ -117,7 +117,6 @@ export class PanierComponent implements OnInit {
     }));
 
     const commande: Commande = {
-      id: 0,
       clientId: utilisateur!.email,
       restaurantId: this.panier[0].plat.restaurantId,
       lignes,

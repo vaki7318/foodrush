@@ -12,7 +12,7 @@ public class LigneCommande {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "commande_id")
+    @Column(name = "commande_id", insertable = false, updatable = false)
     private Long commandeId;
     
     @Column(name = "plat_id")
