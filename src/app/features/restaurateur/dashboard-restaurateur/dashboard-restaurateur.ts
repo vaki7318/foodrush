@@ -39,10 +39,11 @@ export class DashboardRestateurateurComponent implements OnInit {
 
   ngOnInit(): void {
     const utilisateur = this.authService.getUtilisateurConnecte();
+    if (!utilisateur) return;
 
-    this.restaurantService.getRestaurants().subscribe({
+    this.restaurantService.getRestaurantsByProprietaire(utilisateur.email).subscribe({
       next: (data) => {
-        this.restaurants = data.filter(r => r.proprietaireId === utilisateur!.uid);
+        this.restaurants = data;
         if (this.restaurants.length > 0) {
           this.restaurant = this.restaurants[0];
           this.restaurantSelectionne = this.restaurants[0];
@@ -67,11 +68,6 @@ export class DashboardRestateurateurComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
-  }
-
-  getPlatsLocaux(): Plat[] {
-    const data = localStorage.getItem('plats_ajoutes');
-    return data ? JSON.parse(data) : [];
   }
 
   selectionnerRestaurant(restaurant: Restaurant): void {

@@ -53,11 +53,12 @@ export class DetailRestaurantComponent implements OnInit {
     const panierData = localStorage.getItem('panier');
     this.panier = panierData ? JSON.parse(panierData) : [];
 
-    this.restaurantService.getRestaurants().subscribe({
+    this.restaurantService.getRestaurantById(id).subscribe({
       next: (data) => {
-        this.restaurant = data.find(r => r.id === id) || null;
+        this.restaurant = data;
         this.cdr.detectChanges();
-      }
+      },
+      error: () => { this.restaurant = null; this.cdr.detectChanges(); }
     });
 
     this.platService.getPlatsByRestaurant(id).subscribe({
