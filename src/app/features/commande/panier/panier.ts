@@ -117,8 +117,8 @@ export class PanierComponent implements OnInit {
     }));
 
     const commande: Commande = {
-      id: Date.now(),
-      clientId: utilisateur!.uid,
+      id: 0,
+      clientId: utilisateur!.email,
       restaurantId: this.panier[0].plat.restaurantId,
       lignes,
       statut: 'en_attente',
@@ -126,9 +126,13 @@ export class PanierComponent implements OnInit {
       adresseLivraison: adresse
     };
 
-    this.commandeService.ajouterCommande(commande);
-    this.viderPanier();
-    this.snackBar.open('Commande passée avec succès !', undefined, { duration: 3000 });
-    this.router.navigate(['/commande/mes-commandes']);
+    this.commandeService.ajouterCommande(commande).subscribe({
+      next: () => {
+        this.viderPanier();
+        this.snackBar.open('Commande passée avec succès !', undefined, { duration: 3000 });
+        this.router.navigate(['/commande/mes-commandes']);
+      },
+      error: () => this.snackBar.open('Erreur lors de la commande, veuillez réessayer.', undefined, { duration: 3000 })
+    });
   }
 }

@@ -32,7 +32,7 @@ export class MesCommandesComponent implements OnInit {
     console.log('Utilisateur connecté:', utilisateur);
 
     if (utilisateur) {
-      this.commandeService.getCommandesByClient(utilisateur.uid).subscribe({
+      this.commandeService.getCommandesByClient(utilisateur.email).subscribe({
         next: (data) => {
           console.log('Mes commandes:', data);
           this.commandes = data.sort((a, b) => b.id! - a.id!);
