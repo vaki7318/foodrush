@@ -72,6 +72,7 @@
         matInput
         [type]="cacheMotDePasse ? 'password' : 'text'"
         name="motDePasse"
+        autocomplete="new-password"
         [(ngModel)]="motDePasse"
         #mdpCtrl="ngModel"
         required
