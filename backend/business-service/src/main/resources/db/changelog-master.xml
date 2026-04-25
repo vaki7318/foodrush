@@ -10,4 +10,5 @@
     <include file="classpath:db/changelog/insert-restaurants-mock.xml"/>
     <include file="classpath:db/changelog/update-restaurants-proprietaire.xml"/>
     <include file="classpath:db/changelog/insert-plats-mock.xml"/>
+    <include file="classpath:db/changelog/insert-plats-restaurant3.xml"/>
 </databaseChangeLog>
