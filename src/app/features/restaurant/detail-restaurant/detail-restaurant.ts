@@ -113,4 +113,8 @@ export class DetailRestaurantComponent implements OnInit {
   getQuantitePanier(platId: number): number {
     return this.panier.find(p => p.plat.id === platId)?.quantite || 0;
   }
+
+  get estRestaurateur(): boolean {
+    return this.authService.estRestaurateur();
+  }
 }

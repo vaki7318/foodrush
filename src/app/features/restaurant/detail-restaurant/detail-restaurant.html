@@ -36,7 +36,7 @@
         <p>{{ plat.description }}</p>
         <p class="prix">{{ plat.prix | currency:'CAD':'symbol':'1.2-2' }}</p>
       </div>
-      <div class="plat-footer">
+      <div class="plat-footer" *ngIf="!estRestaurateur">
         <button class="btn-primary"
                 [disabled]="!plat.disponible"
                 (click)="ajouterAuPanier(plat)">

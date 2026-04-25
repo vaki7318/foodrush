@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RestaurantService } from '../../../core/services/restaurant';
 import { PlatService } from '../../../core/services/plat';
 import { CommandeService } from '../../../core/services/commande';
@@ -18,7 +19,8 @@ import { Commande } from '../../../core/models/commande';
   imports: [
     CommonModule,
     RouterLink,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
   ],
   templateUrl: './dashboard-restaurateur.html',
   styleUrl: './dashboard-restaurateur.scss'
@@ -32,6 +34,8 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
   commandes: Commande[] = [];
   chargement = true;
   private routerSub!: Subscription;
+  private pollingInterval: any;
+  private dernierIdMax = 0;
 
   constructor(
     private restaurantService: RestaurantService,
@@ -39,6 +43,7 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
     private commandeService: CommandeService,
     private authService: AuthService,
     private router: Router,
+    private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -51,6 +56,7 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routerSub?.unsubscribe();
+    this.arreterPolling();
   }
 
   chargerRestaurants(): void {
@@ -86,7 +92,9 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
 
     this.commandeService.getCommandesByRestaurant(restaurantId).subscribe({
       next: (commandes) => {
-        this.commandes = commandes.sort((a, b) => b.id! - a.id!);
+        this.commandes = commandes.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+        this.dernierIdMax = this.commandes.length > 0 ? (this.commandes[0].id ?? 0) : 0;
+        this.demarrerPolling();
         this.cdr.detectChanges();
       }
     });
@@ -150,5 +158,34 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
 
   getCommandesEnAttente(): number {
     return this.commandes.filter(c => c.statut === 'en_attente').length;
+  }
+
+  demarrerPolling(): void {
+    this.arreterPolling();
+    this.pollingInterval = setInterval(() => this.verifierNouvellesCommandes(), 30000);
+  }
+
+  arreterPolling(): void {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+      this.pollingInterval = null;
+    }
+  }
+
+  verifierNouvellesCommandes(): void {
+    if (!this.restaurantSelectionne) return;
+    this.commandeService.getCommandesByRestaurant(this.restaurantSelectionne.id).subscribe({
+      next: (commandes) => {
+        const sorted = commandes.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
+        const idMax = sorted.length > 0 ? (sorted[0].id ?? 0) : 0;
+        if (this.dernierIdMax > 0 && idMax > this.dernierIdMax) {
+          const nbNouvelles = commandes.filter(c => (c.id ?? 0) > this.dernierIdMax).length;
+          this.snackBar.open(`🔔 ${nbNouvelles} nouvelle(s) commande(s) reçue(s) !`, undefined, { duration: 6000 });
+          this.commandes = sorted;
+          this.cdr.detectChanges();
+        }
+        this.dernierIdMax = idMax;
+      }
+    });
   }
 }
