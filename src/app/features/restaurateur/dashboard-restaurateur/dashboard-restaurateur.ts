@@ -35,7 +35,7 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
   chargement = true;
   private routerSub!: Subscription;
   private pollingInterval: any;
-  private dernierIdMax = 0;
+  private dernierIdMax = -1;
 
   constructor(
     private restaurantService: RestaurantService,
@@ -162,7 +162,7 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
 
   demarrerPolling(): void {
     this.arreterPolling();
-    this.pollingInterval = setInterval(() => this.verifierNouvellesCommandes(), 30000);
+    this.pollingInterval = setInterval(() => this.verifierNouvellesCommandes(), 15000);
   }
 
   arreterPolling(): void {
@@ -178,7 +178,7 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
       next: (commandes) => {
         const sorted = commandes.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
         const idMax = sorted.length > 0 ? (sorted[0].id ?? 0) : 0;
-        if (this.dernierIdMax > 0 && idMax > this.dernierIdMax) {
+        if (this.dernierIdMax >= 0 && idMax > this.dernierIdMax) {
           const nbNouvelles = commandes.filter(c => (c.id ?? 0) > this.dernierIdMax).length;
           this.snackBar.open(`🔔 ${nbNouvelles} nouvelle(s) commande(s) reçue(s) !`, undefined, { duration: 6000 });
           this.commandes = sorted;
