@@ -41,6 +41,33 @@
   padding: 20px;
 }
 
+.restaurant-titre {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e8eaf6;
+  margin-bottom: 8px;
+
+  .restaurant-nom {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #3f51b5;
+  }
+
+  .restaurant-adresse {
+    font-size: 0.85rem;
+    color: grey;
+  }
+}
+
+.groupe-total {
+  text-align: right;
+  padding-top: 10px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
 .panier-item {
   display: flex;
   align-items: center;

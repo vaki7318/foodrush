@@ -12,25 +12,38 @@
   <!-- Contenu panier -->
   <div class="panier-contenu" *ngIf="panier.length > 0">
 
-    <div class="panier-card">
-      <div class="panier-item" *ngFor="let item of panier; let i = index">
+    <!-- Un bloc par restaurant -->
+    <div class="panier-card" *ngFor="let groupe of getGroupes()">
+
+      <div class="restaurant-titre">
+        <span class="restaurant-nom">🍽️ {{ restaurantsMap.get(groupe.restaurantId)?.nom || '...' }}</span>
+        <span class="restaurant-adresse">{{ restaurantsMap.get(groupe.restaurantId)?.adresse }}</span>
+      </div>
+
+      <div class="panier-item" *ngFor="let item of groupe.items">
         <img [src]="item.plat.photo" [alt]="item.plat.nom" class="plat-image">
         <div class="plat-info">
           <h3>{{ item.plat.nom }}</h3>
           <p class="prix-unitaire">{{ item.plat.prix | currency:'CAD':'symbol':'1.2-2' }} / unité</p>
         </div>
         <div class="quantite-controls">
-          <button type="button" class="btn-quantite" (click)="diminuerQuantite(i)">−</button>
+          <button type="button" class="btn-quantite" (click)="diminuerQuantite(item.globalIndex)">−</button>
           <span class="quantite">{{ item.quantite }}</span>
-          <button type="button" class="btn-quantite" (click)="augmenterQuantite(i)">+</button>
+          <button type="button" class="btn-quantite" (click)="augmenterQuantite(item.globalIndex)">+</button>
         </div>
         <p class="sous-total">{{ item.plat.prix * item.quantite | currency:'CAD':'symbol':'1.2-2' }}</p>
-        <button type="button" class="btn-supprimer" (click)="supprimerPlat(i)">🗑️</button>
+        <button type="button" class="btn-supprimer" (click)="supprimerPlat(item.globalIndex)">🗑️</button>
       </div>
 
-      <div class="total">
-        <h2>Total : {{ getTotal() | currency:'CAD':'symbol':'1.2-2' }}</h2>
+      <div class="groupe-total">
+        Sous-total : <strong>{{ getTotalGroupe(groupe.restaurantId) | currency:'CAD':'symbol':'1.2-2' }}</strong>
       </div>
+
+    </div>
+
+    <!-- Total global -->
+    <div class="total">
+      <h2>Total : {{ getTotal() | currency:'CAD':'symbol':'1.2-2' }}</h2>
     </div>
 
     <!-- Adresse livraison -->
