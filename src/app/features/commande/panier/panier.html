@@ -9,18 +9,60 @@
     <a class="btn-primary" routerLink="/restaurants">Voir les restaurants</a>
   </div>
 
-  <!-- Contenu panier -->
-  <div class="panier-contenu" *ngIf="panier.length > 0">
+  <!-- VUE D'ENSEMBLE : liste des restaurants -->
+  <div class="panier-contenu" *ngIf="panier.length > 0 && restaurantActif === null">
 
-    <!-- Un bloc par restaurant -->
-    <div class="panier-card" *ngFor="let groupe of getGroupes()">
-
-      <div class="restaurant-titre">
+    <div class="restaurant-carte" *ngFor="let groupe of getGroupes()" (click)="selectionnerRestaurant(groupe.restaurantId)">
+      <div class="restaurant-carte-info">
         <span class="restaurant-nom">🍽️ {{ restaurantsMap.get(groupe.restaurantId)?.nom || '...' }}</span>
         <span class="restaurant-adresse">{{ restaurantsMap.get(groupe.restaurantId)?.adresse }}</span>
       </div>
+      <div class="restaurant-carte-meta">
+        <span class="nb-articles">{{ getNombreArticles(groupe.restaurantId) }} article(s)</span>
+        <span class="sous-total-carte">{{ getTotalGroupe(groupe.restaurantId) | currency:'CAD':'symbol':'1.2-2' }}</span>
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </div>
 
-      <div class="panier-item" *ngFor="let item of groupe.items">
+    <div class="total">
+      <h2>Total : {{ getTotal() | currency:'CAD':'symbol':'1.2-2' }}</h2>
+    </div>
+
+    <!-- Adresse + actions globales -->
+    <div class="livraison-card">
+      <h3>Adresse de livraison</h3>
+      <input
+        type="text"
+        name="adresseLivraison"
+        [(ngModel)]="adresseLivraison"
+        placeholder="123 Rue Exemple, Ville"
+        class="input"
+        required
+      >
+      <p class="field-error" *ngIf="submittedCommande && adresseErreur">{{ adresseErreur }}</p>
+      <div class="livraison-actions">
+        <button type="button" class="btn-secondary" (click)="viderPanier()">🗑️ Vider le panier</button>
+        <button type="button" class="btn-primary" (click)="passerCommande()">✅ Tout commander</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VUE DÉTAIL : plats d'un restaurant -->
+  <div class="panier-contenu" *ngIf="panier.length > 0 && restaurantActif !== null">
+
+    <button type="button" class="btn-retour" (click)="retourVueEnsemble()">
+      <mat-icon>arrow_back</mat-icon> Retour au panier
+    </button>
+
+    <div class="panier-card">
+
+      <div class="restaurant-titre">
+        <span class="restaurant-nom">🍽️ {{ restaurantsMap.get(restaurantActif)?.nom }}</span>
+        <span class="restaurant-adresse">{{ restaurantsMap.get(restaurantActif)?.adresse }}</span>
+      </div>
+
+      <div class="panier-item" *ngFor="let item of getGroupeActif()">
         <img [src]="item.plat.photo" [alt]="item.plat.nom" class="plat-image">
         <div class="plat-info">
           <h3>{{ item.plat.nom }}</h3>
@@ -36,17 +78,12 @@
       </div>
 
       <div class="groupe-total">
-        Sous-total : <strong>{{ getTotalGroupe(groupe.restaurantId) | currency:'CAD':'symbol':'1.2-2' }}</strong>
+        Sous-total : <strong>{{ getTotalGroupe(restaurantActif) | currency:'CAD':'symbol':'1.2-2' }}</strong>
       </div>
 
     </div>
 
-    <!-- Total global -->
-    <div class="total">
-      <h2>Total : {{ getTotal() | currency:'CAD':'symbol':'1.2-2' }}</h2>
-    </div>
-
-    <!-- Adresse livraison -->
+    <!-- Adresse + commander ce restaurant -->
     <div class="livraison-card">
       <h3>Adresse de livraison</h3>
       <input
@@ -57,17 +94,11 @@
         class="input"
         required
       >
-
-      <p class="field-error" *ngIf="submittedCommande && adresseErreur">
-        {{ adresseErreur }}
-      </p>
-
+      <p class="field-error" *ngIf="submittedCommande && adresseErreur">{{ adresseErreur }}</p>
       <div class="livraison-actions">
-        <button type="button" class="btn-secondary" (click)="viderPanier()">
-          🗑️ Vider le panier
-        </button>
-        <button type="button" class="btn-primary" (click)="passerCommande()">
-          ✅ Passer la commande
+        <button type="button" class="btn-secondary" (click)="retourVueEnsemble()">← Retour</button>
+        <button type="button" class="btn-primary" (click)="passerCommandeRestaurant(restaurantActif)">
+          ✅ Commander chez {{ restaurantsMap.get(restaurantActif)?.nom }}
         </button>
       </div>
     </div>

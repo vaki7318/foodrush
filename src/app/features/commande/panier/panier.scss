@@ -41,6 +41,54 @@
   padding: 20px;
 }
 
+.btn-retour {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #3f51b5;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  font-weight: 500;
+
+  &:hover { text-decoration: underline; }
+}
+
+.restaurant-carte {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.15s;
+
+  &:hover {
+    box-shadow: 0 6px 24px rgba(63,81,181,0.18);
+    transform: translateY(-2px);
+  }
+
+  .restaurant-carte-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .restaurant-carte-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .nb-articles { color: grey; font-size: 0.9rem; }
+    .sous-total-carte { font-weight: bold; color: #3f51b5; }
+  }
+}
+
 .restaurant-titre {
   display: flex;
   flex-direction: column;

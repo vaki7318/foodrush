@@ -32,6 +32,7 @@ export class PanierComponent implements OnInit {
   submittedCommande = false;
   adresseErreur = '';
   restaurantsMap: Map<number, Restaurant> = new Map();
+  restaurantActif: number | null = null;
 
   constructor(
     private commandeService: CommandeService,
@@ -71,10 +72,35 @@ export class PanierComponent implements OnInit {
     return Array.from(map.entries()).map(([restaurantId, items]) => ({ restaurantId, items }));
   }
 
+  getGroupeActif(): { plat: Plat, quantite: number, globalIndex: number }[] {
+    if (this.restaurantActif === null) return [];
+    return this.getGroupes().find(g => g.restaurantId === this.restaurantActif)?.items ?? [];
+  }
+
+  getNombreArticles(restaurantId: number): number {
+    return this.panier
+      .filter(item => item.plat.restaurantId === restaurantId)
+      .reduce((total, item) => total + item.quantite, 0);
+  }
+
   getTotalGroupe(restaurantId: number): number {
     return this.panier
       .filter(item => item.plat.restaurantId === restaurantId)
       .reduce((total, item) => total + item.plat.prix * item.quantite, 0);
+  }
+
+  selectionnerRestaurant(restaurantId: number): void {
+    this.restaurantActif = restaurantId;
+    this.submittedCommande = false;
+    this.adresseErreur = '';
+    this.cdr.detectChanges();
+  }
+
+  retourVueEnsemble(): void {
+    this.restaurantActif = null;
+    this.submittedCommande = false;
+    this.adresseErreur = '';
+    this.cdr.detectChanges();
   }
 
   augmenterQuantite(index: number): void {
@@ -99,6 +125,10 @@ export class PanierComponent implements OnInit {
     this.panier.splice(index, 1);
     this.panier = [...this.panier];
     this.sauvegarderPanier();
+    if (this.restaurantActif !== null) {
+      const encoreItems = this.panier.some(item => item.plat.restaurantId === this.restaurantActif);
+      if (!encoreItems) this.retourVueEnsemble();
+    }
     this.cdr.detectChanges();
   }
 
@@ -113,9 +143,66 @@ export class PanierComponent implements OnInit {
 
   viderPanier(): void {
     this.panier = [];
+    this.restaurantActif = null;
     localStorage.removeItem('panier');
     window.dispatchEvent(new Event('panierUpdated'));
     this.cdr.detectChanges();
+  }
+
+  passerCommandeRestaurant(restaurantId: number): void {
+    this.submittedCommande = true;
+    this.adresseErreur = '';
+
+    const adresse = (this.adresseLivraison || '').trim();
+    if (!adresse) {
+      this.adresseErreur = 'Veuillez entrer une adresse de livraison.';
+      this.snackBar.open(this.adresseErreur, undefined, { duration: 3000 });
+      return;
+    }
+    if (adresse.length < 5) {
+      this.adresseErreur = 'Adresse de livraison invalide.';
+      this.snackBar.open(this.adresseErreur, undefined, { duration: 3000 });
+      return;
+    }
+
+    const utilisateur = this.authService.getUtilisateurConnecte();
+    const groupe = this.getGroupes().find(g => g.restaurantId === restaurantId);
+    if (!groupe) return;
+
+    const lignes: LigneCommande[] = groupe.items.map(item => ({
+      platId: item.plat.id,
+      nomPlat: item.plat.nom,
+      quantite: item.quantite,
+      prixUnitaire: item.plat.prix
+    }));
+
+    const commande: Commande = {
+      clientId: utilisateur!.email,
+      restaurantId,
+      lignes,
+      statut: 'en_attente',
+      dateCommande: new Date().toISOString().split('T')[0],
+      adresseLivraison: adresse
+    };
+
+    this.commandeService.ajouterCommande(commande).subscribe({
+      next: () => {
+        this.panier = this.panier.filter(item => item.plat.restaurantId !== restaurantId);
+        this.sauvegarderPanier();
+        this.restaurantActif = null;
+        this.submittedCommande = false;
+        this.adresseErreur = '';
+
+        if (this.panier.length === 0) {
+          this.snackBar.open('Commande passée avec succès !', undefined, { duration: 3000 });
+          this.router.navigate(['/commande/mes-commandes']);
+        } else {
+          this.snackBar.open('Commande passée ! Vos autres articles sont toujours dans le panier.', undefined, { duration: 4000 });
+          this.cdr.detectChanges();
+        }
+      },
+      error: () => this.snackBar.open('Erreur lors de la commande, veuillez réessayer.', undefined, { duration: 3000 })
+    });
   }
 
   passerCommande(): void {
@@ -123,19 +210,16 @@ export class PanierComponent implements OnInit {
     this.adresseErreur = '';
 
     const adresse = (this.adresseLivraison || '').trim();
-
     if (!adresse) {
       this.adresseErreur = 'Veuillez entrer une adresse de livraison.';
       this.snackBar.open(this.adresseErreur, undefined, { duration: 3000 });
       return;
     }
-
     if (adresse.length < 5) {
       this.adresseErreur = 'Adresse de livraison invalide.';
       this.snackBar.open(this.adresseErreur, undefined, { duration: 3000 });
       return;
     }
-
     if (this.panier.length === 0) {
       this.snackBar.open('Votre panier est vide', undefined, { duration: 3000 });
       return;
@@ -152,7 +236,6 @@ export class PanierComponent implements OnInit {
         quantite: item.quantite,
         prixUnitaire: item.plat.prix
       }));
-
       const commande: Commande = {
         clientId: utilisateur!.email,
         restaurantId: groupe.restaurantId,
@@ -161,7 +244,6 @@ export class PanierComponent implements OnInit {
         dateCommande,
         adresseLivraison: adresse
       };
-
       return this.commandeService.ajouterCommande(commande);
     });
 
