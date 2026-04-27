@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="insert-plats-jalon2" author="foodrush">
+        <!-- Plats de Sakura Sushi Bar -->
+        <insert tableName="plats">
+            <column name="nom" value="Sushi Mix (12 pièces)"/>
+            <column name="description" value="Plateau de sushis variés : saumon, thon, crevette"/>
+            <column name="prix" value="18.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1563612116625-3012372fccce?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Sakura Sushi Bar')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Ramen au poulet"/>
+            <column name="description" value="Soupe ramen au bouillon de poulet, nouilles et oeuf mollet"/>
+            <column name="prix" value="14.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Sakura Sushi Bar')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Gyoza (6 pièces)"/>
+            <column name="description" value="Raviolis japonais dorés à la poêle, sauce soja-gingembre"/>
+            <column name="prix" value="8.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1511689660979-10d2b1ec4ac0?w=800"/>
+            <column name="categorie" value="Entrée"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Sakura Sushi Bar')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Mochi glacé"/>
+            <column name="description" value="Dessert japonais au riz gluant fourré crème glacée matcha"/>
+            <column name="prix" value="6.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1607301405390-d831c242f59b?w=800"/>
+            <column name="categorie" value="Dessert"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Sakura Sushi Bar')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+
+        <!-- Plats de Saveurs d'Afrique -->
+        <insert tableName="plats">
+            <column name="nom" value="Riz Jollof"/>
+            <column name="description" value="Riz épicé à la tomate, poivrons et poulet grillé"/>
+            <column name="prix" value="13.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Saveurs d''Afrique')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Poulet Yassa"/>
+            <column name="description" value="Poulet mariné au citron et oignons caramélisés, servi avec riz"/>
+            <column name="prix" value="15.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Saveurs d''Afrique')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Alloco"/>
+            <column name="description" value="Bananes plantain frites dorées, sauce pimentée maison"/>
+            <column name="prix" value="5.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1566843972142-a7fcb70de55a?w=800"/>
+            <column name="categorie" value="Entrée"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Saveurs d''Afrique')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Thiéboudienne"/>
+            <column name="description" value="Riz au poisson et légumes mijotés, spécialité sénégalaise"/>
+            <column name="prix" value="16.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Saveurs d''Afrique')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+
+        <!-- Plats de Spice Garden -->
+        <insert tableName="plats">
+            <column name="nom" value="Butter Chicken"/>
+            <column name="description" value="Poulet mijoté en sauce tomate crémeuse aux épices indiennes"/>
+            <column name="prix" value="15.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Spice Garden')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Naan au beurre"/>
+            <column name="description" value="Pain indien moelleux cuit au tandoor, beurre et ail"/>
+            <column name="prix" value="3.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800"/>
+            <column name="categorie" value="Entrée"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Spice Garden')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Biryani végétarien"/>
+            <column name="description" value="Riz basmati aux légumes de saison et épices aromatiques"/>
+            <column name="prix" value="13.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Spice Garden')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Mango Lassi"/>
+            <column name="description" value="Boisson rafraîchissante au yaourt et mangue fraîche"/>
+            <column name="prix" value="4.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=800"/>
+            <column name="categorie" value="Boisson"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'Spice Garden')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+
+        <!-- Plats de La Bella Italia -->
+        <insert tableName="plats">
+            <column name="nom" value="Pâtes Carbonara"/>
+            <column name="description" value="Spaghetti à la carbonara crémeuse, pancetta et parmesan"/>
+            <column name="prix" value="14.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'La Bella Italia')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Pizza Margherita"/>
+            <column name="description" value="Pizza napolitaine, sauce tomate, mozzarella et basilic frais"/>
+            <column name="prix" value="13.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800"/>
+            <column name="categorie" value="Plat principal"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'La Bella Italia')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Bruschetta"/>
+            <column name="description" value="Tranches de pain grillé à la tomate fraîche et basilic"/>
+            <column name="prix" value="7.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?w=800"/>
+            <column name="categorie" value="Entrée"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'La Bella Italia')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+        <insert tableName="plats">
+            <column name="nom" value="Tiramisu"/>
+            <column name="description" value="Dessert italien au café, mascarpone et cacao"/>
+            <column name="prix" value="7.99"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800"/>
+            <column name="categorie" value="Dessert"/>
+            <column name="restaurant_id" valueComputed="(SELECT id FROM restaurants WHERE nom = 'La Bella Italia')"/>
+            <column name="disponible" value="true"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

@@ -20,6 +20,10 @@ public class DataInitializer implements CommandLineRunner {
         creerSiAbsent("Sophie Cuisine", "sophie@email.com", "foodrush123", "restaurateur", "514-000-0004");
         creerSiAbsent("Jean Dupont", "jean@email.com", "foodrush123", "client", "514-000-0001");
         creerSiAbsent("Marie Tremblay", "marie@email.com", "foodrush123", "client", "514-000-0002");
+        creerSiAbsent("Zuuri San", "zuuri@email.com", "foodrush123", "restaurateur", "514-000-0005");
+        creerSiAbsent("Marie Ly", "marie.ly@email.com", "foodrush123", "restaurateur", "514-000-0006");
+        creerSiAbsent("Lucas Fernandez", "lucas@email.com", "foodrush123", "restaurateur", "514-000-0007");
+        creerSiAbsent("Anna Merlin", "anna.merlin@email.com", "foodrush123", "restaurateur", "514-000-0008");
     }
 
     private void creerSiAbsent(String nom, String email, String motDePasse, String role, String telephone) {

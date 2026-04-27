@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="insert-restaurants-jalon2" author="foodrush">
+        <insert tableName="restaurants">
+            <column name="nom" value="Sakura Sushi Bar"/>
+            <column name="description" value="Sushis et cuisine japonaise traditionnelle"/>
+            <column name="adresse" value="789 Rue des Cerisiers, Trois-Rivières"/>
+            <column name="telephone" value="819-444-4444"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800"/>
+            <column name="categorie" value="Japonais"/>
+            <column name="proprietaire_id" value="zuuri@email.com"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="nom" value="Saveurs d'Afrique"/>
+            <column name="description" value="Cuisine africaine authentique et généreuse"/>
+            <column name="adresse" value="321 Avenue Laviolette, Trois-Rivières"/>
+            <column name="telephone" value="819-555-5555"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800"/>
+            <column name="categorie" value="Africain"/>
+            <column name="proprietaire_id" value="marie.ly@email.com"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="nom" value="Spice Garden"/>
+            <column name="description" value="Cuisine indienne épicée et végétarienne"/>
+            <column name="adresse" value="654 Chemin des Prairies, Trois-Rivières"/>
+            <column name="telephone" value="819-666-6666"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800"/>
+            <column name="categorie" value="Indien"/>
+            <column name="proprietaire_id" value="lucas@email.com"/>
+        </insert>
+        <insert tableName="restaurants">
+            <column name="nom" value="La Bella Italia"/>
+            <column name="description" value="Pasta et pizza napolitaines faites maison"/>
+            <column name="adresse" value="987 Rue Notre-Dame, Trois-Rivières"/>
+            <column name="telephone" value="819-777-7777"/>
+            <column name="photo" value="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800"/>
+            <column name="categorie" value="Italien"/>
+            <column name="proprietaire_id" value="anna.merlin@email.com"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
