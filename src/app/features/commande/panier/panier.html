@@ -52,7 +52,7 @@
   <div class="panier-contenu" *ngIf="panier.length > 0 && restaurantActif !== null">
 
     <button type="button" class="btn-retour" (click)="retourVueEnsemble()">
-      <mat-icon>arrow_back</mat-icon> Retour au panier
+      <mat-icon>arrow_back</mat-icon> Retour
     </button>
 
     <div class="panier-card">
@@ -96,7 +96,6 @@
       >
       <p class="field-error" *ngIf="submittedCommande && adresseErreur">{{ adresseErreur }}</p>
       <div class="livraison-actions">
-        <button type="button" class="btn-secondary" (click)="retourVueEnsemble()">← Retour</button>
         <button type="button" class="btn-primary" (click)="passerCommandeRestaurant(restaurantActif)">
           ✅ Commander chez {{ restaurantsMap.get(restaurantActif)?.nom }}
         </button>
