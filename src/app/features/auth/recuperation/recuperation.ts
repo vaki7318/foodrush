@@ -72,7 +72,7 @@ export class RecuperationComponent {
         }, 2000);
       },
       error: () => {
-        this.erreur = 'Aucun compte associé à cet email ou erreur serveur.';
+        this.erreur = 'Aucun compte associé à cet email.';
         this.cdr.detectChanges();
       }
     });
