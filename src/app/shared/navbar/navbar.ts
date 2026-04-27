@@ -27,6 +27,7 @@ export class NavbarComponent implements OnInit {
 
   utilisateur: Utilisateur | null = null;
   nbArticlesPanier = 0;
+  nbCommandesEnAttente = 0;
 
   constructor(
     private authService: AuthService,
@@ -39,11 +40,14 @@ export class NavbarComponent implements OnInit {
     this.mettreAJourPanier();
     this.cdr.detectChanges();
 
+    this.mettreAJourBadgeCommandes();
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.utilisateur = this.authService.getUtilisateurConnecte();
       this.mettreAJourPanier();
+      this.mettreAJourBadgeCommandes();
       this.cdr.detectChanges();
     });
   }
@@ -63,6 +67,17 @@ export class NavbarComponent implements OnInit {
   @HostListener('window:panierUpdated')
   onPanierUpdated(): void {
     this.mettreAJourPanier();
+  }
+
+  @HostListener('window:commandesUpdated')
+  onCommandesUpdated(): void {
+    this.mettreAJourBadgeCommandes();
+  }
+
+  mettreAJourBadgeCommandes(): void {
+    const count = localStorage.getItem('commandesEnAttente');
+    this.nbCommandesEnAttente = count ? parseInt(count) : 0;
+    this.cdr.detectChanges();
   }
 
   logout(): void {

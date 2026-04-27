@@ -94,6 +94,7 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
       next: (commandes) => {
         this.commandes = commandes.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
         this.dernierIdMax = this.commandes.length > 0 ? (this.commandes[0].id ?? 0) : 0;
+        this.mettreAJourBadge();
         this.demarrerPolling();
         this.cdr.detectChanges();
       }
@@ -134,6 +135,7 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
     this.commandeService.mettreAJourStatut(commande.id!, nouveauStatut).subscribe({
       next: (cmd) => {
         commande.statut = cmd.statut;
+        this.mettreAJourBadge();
         this.cdr.detectChanges();
       }
     });
@@ -160,6 +162,12 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
     return this.commandes.filter(c => c.statut === 'en_attente').length;
   }
 
+  mettreAJourBadge(): void {
+    const nb = this.commandes.filter(c => c.statut === 'en_attente').length;
+    localStorage.setItem('commandesEnAttente', String(nb));
+    window.dispatchEvent(new Event('commandesUpdated'));
+  }
+
   demarrerPolling(): void {
     this.arreterPolling();
     this.pollingInterval = setInterval(() => this.verifierNouvellesCommandes(), 15000);
@@ -182,6 +190,7 @@ export class DashboardRestateurateurComponent implements OnInit, OnDestroy {
           const nbNouvelles = commandes.filter(c => (c.id ?? 0) > this.dernierIdMax).length;
           this.snackBar.open(`🔔 ${nbNouvelles} nouvelle(s) commande(s) reçue(s) !`, undefined, { duration: 6000 });
           this.commandes = sorted;
+          this.mettreAJourBadge();
           this.cdr.detectChanges();
         }
         this.dernierIdMax = idMax;

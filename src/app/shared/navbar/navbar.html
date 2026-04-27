@@ -27,7 +27,10 @@
     </ng-container>
 
     <ng-container *ngIf="utilisateur.role === 'restaurateur'">
-      <a mat-button routerLink="/restaurateur/dashboard" style="color: white;">Dashboard</a>
+      <a mat-button routerLink="/restaurateur/dashboard" style="color: white; position: relative;">
+        Dashboard
+        <span class="nav-badge" *ngIf="nbCommandesEnAttente > 0">{{ nbCommandesEnAttente }}</span>
+      </a>
       <a mat-button routerLink="/restaurateur/restaurants" style="color: white;">Mes restaurants</a>
       <a mat-button routerLink="/restaurateur/plats" style="color: white;">Mes plats</a>
     </ng-container>
