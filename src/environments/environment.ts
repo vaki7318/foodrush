@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8081/api',
-  businessUrl: 'http://localhost:8082/api'
+  apiUrl: 'https://foodrush-production-8671.up.railway.app/api',
+  businessUrl: 'https://zucchini-nourishment-production.up.railway.app/api'
 };
