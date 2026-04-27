@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="rollback-photos-jalon1" author="foodrush">
+
+        <!-- Restauration photos restaurants Jalon I -->
+        <update tableName="restaurants">
+            <column name="photo" value="images/restaurant1.jpg"/>
+            <where>nom = 'Chez Carlos' AND adresse = '123 Rue Principale, Trois-Rivières'</where>
+        </update>
+        <update tableName="restaurants">
+            <column name="photo" value="images/restaurant2.jpg"/>
+            <where>nom = 'La Table de Sophie'</where>
+        </update>
+        <update tableName="restaurants">
+            <column name="photo" value="images/restaurant1.jpg"/>
+            <where>nom = 'Chez Carlos' AND adresse = '456 Avenue des Pins, Trois-Rivières'</where>
+        </update>
+
+        <!-- Restauration photos plats Chez Carlos (123 Rue Principale) -->
+        <update tableName="plats">
+            <column name="photo" value="images/plat1.jpg"/>
+            <where>nom = 'Tacos au boeuf' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '123 Rue Principale, Trois-Rivières')</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="images/plat2.jpg"/>
+            <where>nom = 'Quesadilla au poulet' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '123 Rue Principale, Trois-Rivières')</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="images/plat3.jpg"/>
+            <where>nom = 'Nachos' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '123 Rue Principale, Trois-Rivières')</where>
+        </update>
+
+        <!-- Restauration photos plats La Table de Sophie -->
+        <update tableName="plats">
+            <column name="photo" value="images/plat4.jpg"/>
+            <where>nom = 'Soupe à l''oignon'</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="images/plat5.jpg"/>
+            <where>nom = 'Boeuf bourguignon'</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="images/plat6.jpg"/>
+            <where>nom = 'Crème brûlée'</where>
+        </update>
+
+        <!-- Restauration photos plats Chez Carlos (456 Avenue des Pins) -->
+        <update tableName="plats">
+            <column name="photo" value="images/plat1.jpg"/>
+            <where>nom = 'Tacos au boeuf' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '456 Avenue des Pins, Trois-Rivières')</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="images/plat2.jpg"/>
+            <where>nom = 'Quesadilla au poulet' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '456 Avenue des Pins, Trois-Rivières')</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="images/plat3.jpg"/>
+            <where>nom = 'Nachos' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '456 Avenue des Pins, Trois-Rivières')</where>
+        </update>
+
+    </changeSet>
+
+</databaseChangeLog>

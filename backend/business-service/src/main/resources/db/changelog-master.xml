@@ -14,4 +14,5 @@
     <include file="classpath:db/changelog/insert-restaurants-jalon2.xml"/>
     <include file="classpath:db/changelog/insert-plats-jalon2.xml"/>
     <include file="classpath:db/changelog/update-photos-unsplash.xml"/>
+    <include file="classpath:db/changelog/rollback-photos-jalon1.xml"/>
 </databaseChangeLog>
