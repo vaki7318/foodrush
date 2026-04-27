@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="update-photos-unsplash" author="foodrush">
+
+        <!-- Photos des restaurants -->
+        <update tableName="restaurants">
+            <column name="photo" value="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800"/>
+            <where>nom = 'Chez Carlos' AND adresse = '123 Rue Principale, Trois-Rivières'</where>
+        </update>
+        <update tableName="restaurants">
+            <column name="photo" value="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800"/>
+            <where>nom = 'La Table de Sophie'</where>
+        </update>
+        <update tableName="restaurants">
+            <column name="photo" value="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800"/>
+            <where>nom = 'Chez Carlos' AND adresse = '456 Avenue des Pins, Trois-Rivières'</where>
+        </update>
+
+        <!-- Photos des plats de Chez Carlos (123 Rue Principale) -->
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800"/>
+            <where>nom = 'Tacos au boeuf' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '123 Rue Principale, Trois-Rivières')</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1618040996337-56904b7850b9?w=800"/>
+            <where>nom = 'Quesadilla au poulet' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '123 Rue Principale, Trois-Rivières')</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=800"/>
+            <where>nom = 'Nachos' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '123 Rue Principale, Trois-Rivières')</where>
+        </update>
+
+        <!-- Photos des plats de La Table de Sophie -->
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1547592180-85f173990554?w=800"/>
+            <where>nom = 'Soupe à l''oignon'</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1534939561126-855b8675edd7?w=800"/>
+            <where>nom = 'Boeuf bourguignon'</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1470324161839-ce2bb6fa6bc3?w=800"/>
+            <where>nom = 'Crème brûlée'</where>
+        </update>
+
+        <!-- Photos des plats de Chez Carlos (456 Avenue des Pins) -->
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800"/>
+            <where>nom = 'Tacos au boeuf' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '456 Avenue des Pins, Trois-Rivières')</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1618040996337-56904b7850b9?w=800"/>
+            <where>nom = 'Quesadilla au poulet' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '456 Avenue des Pins, Trois-Rivières')</where>
+        </update>
+        <update tableName="plats">
+            <column name="photo" value="https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?w=800"/>
+            <where>nom = 'Nachos' AND restaurant_id = (SELECT id FROM restaurants WHERE adresse = '456 Avenue des Pins, Trois-Rivières')</where>
+        </update>
+
+    </changeSet>
+
+</databaseChangeLog>
